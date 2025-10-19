@@ -1,4 +1,4 @@
-package com.example.sgdata
+package com.liuyuheng.sgdata
 
 import org.junit.Test
 

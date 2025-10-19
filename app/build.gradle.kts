@@ -9,11 +9,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.sgdata"
+    namespace = "com.liuyuheng.sgdata"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.sgdata"
+        applicationId = "com.liuyuheng.sgdata"
         minSdk = 33
         targetSdk = 36
         versionCode = 1
