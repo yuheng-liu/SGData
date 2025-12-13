@@ -1,7 +1,8 @@
 package com.liuyuheng.sgdata.di
 
-import com.liuyuheng.sgdata.data.repository.BusRepositoryImpl
-import com.liuyuheng.sgdata.domain.repository.BusRepository
+import com.liuyuheng.sgdata.data.network.WeatherForecastApi
+import com.liuyuheng.sgdata.data.repository.WeatherForecastRepositoryImpl
+import com.liuyuheng.sgdata.domain.repository.WeatherForecastRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +15,9 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideBusRepository(): BusRepository {
-        return BusRepositoryImpl()
+    fun provideWeatherForecastRepository(
+        weatherForecastApi: WeatherForecastApi,
+    ): WeatherForecastRepository {
+        return WeatherForecastRepositoryImpl(weatherForecastApi)
     }
 }

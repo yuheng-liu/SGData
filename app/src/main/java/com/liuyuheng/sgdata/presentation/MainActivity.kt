@@ -11,29 +11,28 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.liuyuheng.sgdata.domain.entity.Bus
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.liuyuheng.sgdata.data.model.Forecast
 import com.liuyuheng.sgdata.presentation.theme.SGDataTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    private val viewModel: BusViewModel by viewModels()
+    private val viewModel: WeatherForecastViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.loadBuses()
+        viewModel.loadWeatherForecasts()
         setContent {
             SGDataTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val buses by viewModel.buses.collectAsState()
-                    BusList(
-                        buses = buses,
-                        modifier = Modifier.padding(innerPadding)
+                    val weatherForecasts by viewModel.weatherForecasts.collectAsStateWithLifecycle()
+
+                    ForecastsList(
+                        forecasts = weatherForecasts,
+                        modifier = Modifier.padding(innerPadding),
                     )
                 }
             }
@@ -42,18 +41,25 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun BusList(buses: List<Bus>, modifier: Modifier = Modifier) {
+fun ForecastsList(
+    forecasts: List<Forecast>,
+    modifier: Modifier = Modifier,
+) {
     LazyColumn(modifier = modifier) {
-        items(buses) { bus ->
-            Text(text = "Bus ${bus.number}")
+        items(forecasts) { forecast ->
+            Text(text = "forecast: ${forecast.temperature}")
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun BusListPreview() {
-    SGDataTheme {
-        BusList(buses = listOf(Bus("1", "10"), Bus("2", "20")))
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun ForecastsListPreview() {
+//    SGDataTheme {
+//        ForecastsList(forecasts = listOf(
+//            Forecast(
+//
+//            )
+//        ))
+//    }
+//}

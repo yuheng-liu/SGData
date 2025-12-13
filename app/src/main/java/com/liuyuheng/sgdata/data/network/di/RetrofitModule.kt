@@ -10,29 +10,39 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-private const val BASE_URL = "https://www.omdbapi.com/"
+private const val DATA_GOV_BASE_URL = "https://api-open.data.gov.sg/v2/real-time/api/"
 
 @Module
 @InstallIn(SingletonComponent::class)
 object RetrofitModule {
-
     @Singleton
     @Provides
-    fun provideMoshi(): Moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-
-    @Singleton
-    @Provides
-    fun provideClient(): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
+    fun provideMoshi(): Moshi = Moshi.Builder()
+        .add(KotlinJsonAdapterFactory())
         .build()
 
     @Singleton
     @Provides
-    fun provideRetrofit(client: OkHttpClient, moshi: Moshi): Retrofit = Retrofit.Builder()
-        .client(client)
-        .baseUrl(BASE_URL)
+    fun provideClient(): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(
+            HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            },
+        ).connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .build()
+
+    @Singleton
+    @Provides
+    fun provideRetrofit(
+        client: OkHttpClient,
+        moshi: Moshi,
+    ): Retrofit = Retrofit.Builder()
+        .baseUrl(DATA_GOV_BASE_URL)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .client(client)
         .build()
 }
