@@ -1,16 +1,17 @@
-package com.liuyuheng.sgdata.presentation.theme
+package com.liuyuheng.sgdata.presentation.main.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.liuyuheng.sgdata.R
 
 val Poppins = FontFamily(
     Font(R.font.poppins, FontWeight.Normal),
-    Font(R.font.poppins, FontWeight.Bold, style = androidx.compose.ui.text.font.FontStyle.Italic),
+    Font(R.font.poppins, FontWeight.Bold, style = FontStyle.Italic),
     Font(R.font.poppins, FontWeight.ExtraBold),
     Font(R.font.poppins, FontWeight.SemiBold),
     Font(R.font.poppins, FontWeight.Light),

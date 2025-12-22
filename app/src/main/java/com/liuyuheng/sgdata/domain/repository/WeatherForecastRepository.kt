@@ -1,8 +1,8 @@
 package com.liuyuheng.sgdata.domain.repository
 
-import com.liuyuheng.sgdata.data.model.Forecast
+import com.liuyuheng.sgdata.domain.model.WeatherForecast
 
 interface WeatherForecastRepository {
 
-    suspend fun getWeatherForecast(): List<Forecast>
+    suspend fun getWeatherForecast(): WeatherForecast
 }

@@ -43,6 +43,9 @@ android {
             jvmTarget = JvmTarget.JVM_11
         }
     }
+    lint {
+        disable += "UnusedDataClass"
+    }
 }
 
 dependencies {
@@ -52,6 +55,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.androidx.core.testing)
@@ -62,12 +66,13 @@ dependencies {
     val composeBom = platform("androidx.compose:compose-bom:2025.09.01")
     implementation(composeBom)
     androidTestImplementation(composeBom)
+
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.tooling.preview)
     debugImplementation(libs.androidx.ui.tooling)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-
+    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.retrofit)
     implementation(libs.logging.interceptor)
     implementation(libs.moshi)
@@ -79,4 +84,5 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+    implementation(libs.kotlinx.datetime)
 }

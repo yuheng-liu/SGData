@@ -1,6 +1,6 @@
 package com.liuyuheng.sgdata.data.network
 
-import com.liuyuheng.sgdata.data.model.WeatherResponse
+import com.liuyuheng.sgdata.data.network.response.WeatherResponse
 import retrofit2.http.GET
 
 private const val FOUR_DAY_OUTLOOK = "four-day-outlook"
