@@ -16,6 +16,7 @@ fun AppNavHost(
     NavHost(
         navController = navHostController,
         startDestination = AppRoute.Home.route,
+        modifier = modifier,
     ) {
         // Home
         composable(AppRoute.Home.route) {
@@ -27,9 +28,7 @@ fun AppNavHost(
         }
         // WeatherForecast
         composable(AppRoute.WeatherForecast.route) {
-            WeatherForecastScreen(
-                modifier = modifier,
-            )
+            WeatherForecastScreen()
         }
     }
 }

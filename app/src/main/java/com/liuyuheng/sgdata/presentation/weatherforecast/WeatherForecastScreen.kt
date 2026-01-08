@@ -1,6 +1,9 @@
 package com.liuyuheng.sgdata.presentation.weatherforecast
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -10,44 +13,58 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.liuyuheng.sgdata.domain.model.WeatherForecast
+import com.liuyuheng.sgdata.presentation.components.DatePickerTextField
 import com.liuyuheng.sgdata.presentation.main.BasePreviewComposable
+import com.liuyuheng.sgdata.presentation.main.theme.Dimensions
+import com.liuyuheng.sgdata.presentation.shared.SGDataSpacer
+import com.liuyuheng.sgdata.presentation.shared.utils.toLocalDate
+import java.time.LocalDate
 
 @Composable
 fun WeatherForecastScreen(
     viewModel: WeatherForecastViewModel = hiltViewModel(),
-    modifier: Modifier,
 ) {
-    val weatherForecast by viewModel.weatherForecast.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     WeatherForecastScreen(
-        weatherForecast = weatherForecast,
-        modifier = modifier,
+        uiState = uiState,
+        onDateSelected = viewModel::setSelectedDate,
         onButtonClicked = viewModel::loadWeatherForecasts,
     )
 }
 
 @Composable
 fun WeatherForecastScreen(
-    weatherForecast: WeatherForecast,
-    modifier: Modifier = Modifier,
+    uiState: WeatherForecastUiState,
+    onDateSelected: (LocalDate?) -> Unit,
     onButtonClicked: () -> Unit,
 ) {
-    weatherForecast.forecastsMap.forEach { (date, forecasts) ->
-        LazyColumn(
-            modifier = modifier
-                .fillMaxSize()
+    Column(
+        modifier = Modifier.padding(Dimensions.paddingMedium)
+    ) {
+        DatePickerTextField { millis ->
+            onDateSelected(millis?.toLocalDate())
+        }
+        SGDataSpacer()
+        Button(
+            onClick = { onButtonClicked() },
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
-            items(forecasts.size) { index ->
-                val forecast = forecasts[index]
-                Text(text = "forecast: ${forecast.temperature}")
+            Text(text = "Get Forecast")
+        }
+        SGDataSpacer()
+        uiState.weatherForecast.forecastsMap.forEach { (date, forecasts) ->
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                items(forecasts.size) { index ->
+                    val forecast = forecasts[index]
+                    Text(text = "forecast: ${forecast.temperature}")
+                }
             }
         }
-    }
-    Button(
-        onClick = { onButtonClicked() }
-    ) {
-        Text(text = "Refresh")
     }
 }
 
@@ -56,7 +73,11 @@ fun WeatherForecastScreen(
 fun WeatherForecastScreenPreview() {
     BasePreviewComposable {
         WeatherForecastScreen(
-            weatherForecast = WeatherForecast(),
+            uiState = WeatherForecastUiState(
+                selectedDate = LocalDate.of(2026, 1, 8),
+
+                ),
+            onDateSelected = {},
             onButtonClicked = {},
         )
     }

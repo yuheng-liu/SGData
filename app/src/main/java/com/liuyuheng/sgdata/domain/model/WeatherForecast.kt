@@ -3,11 +3,11 @@ package com.liuyuheng.sgdata.domain.model
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 
-
 data class WeatherForecast(
     val forecastsMap: Map<LocalDate, List<Forecast>> = emptyMap(),
 ) {
     data class Forecast(
+        val date: LocalDate,
         val dayOfWeek: DayOfWeek,
         val temperature: Temperature,
         val relativeHumidity: RelativeHumidity,

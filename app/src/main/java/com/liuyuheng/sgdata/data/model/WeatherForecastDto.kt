@@ -9,14 +9,14 @@ data class WeatherForecastDto(
 ) {
     @JsonClass(generateAdapter = true)
     data class WeatherRecord(
-        val date: String, // 2024-07-17T00:00:00.000Z
-        val updatedTimestamp: String, // 2024-07-16T21:20:50.000Z
-        val timestamp: String, // 2024-07-16T21:17:00.000Z
-        val forecasts: List<Forecast>, // Forecast summary for the day
+        val date: String, // Date of record
+        val updatedTimestamp: String, // 2026-01-03T05:40:50+08:00
+        val timestamp: String, // 2026-01-03T05:30:00+08:00
+        val forecasts: List<Forecast>, // Forecast summary from date
     ) {
         @JsonClass(generateAdapter = true)
         data class Forecast(
-            val timestamp: String, // 2024-07-16T21:17:00.000Z
+            val timestamp: String, // Date of forecast, 2026-01-04T00:00:00+08:00
             val temperature: Temperature, // Unit of measure - Degrees Celsius
             val relativeHumidity: RelativeHumidity, // Unit of measure - Percentage
             val forecast: ForecastDetails,
