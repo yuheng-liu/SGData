@@ -1,4 +1,4 @@
-package com.liuyuheng.sgdata.presentation.shared.utils
+package com.liuyuheng.sgdata.utils
 
 import java.time.Instant
 import java.time.LocalDate
@@ -20,4 +20,8 @@ fun Long.toLocalDate(
     return Instant.ofEpochMilli(this)
         .atZone(zoneId)
         .toLocalDate()
+}
+
+fun String.toLocalDate(): LocalDate {
+    return LocalDate.parse(this)
 }

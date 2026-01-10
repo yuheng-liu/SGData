@@ -1,6 +1,6 @@
 package com.liuyuheng.sgdata.presentation.shared.loader
 
-import com.liuyuheng.sgdata.presentation.shared.Constants
+import com.liuyuheng.sgdata.utils.Constants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

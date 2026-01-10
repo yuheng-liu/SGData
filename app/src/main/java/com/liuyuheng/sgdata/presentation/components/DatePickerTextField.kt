@@ -22,21 +22,23 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.liuyuheng.sgdata.R
 import com.liuyuheng.sgdata.presentation.main.BasePreviewComposable
-import com.liuyuheng.sgdata.presentation.shared.utils.toFormattedDate
+import com.liuyuheng.sgdata.utils.toFormattedDate
 
 @Composable
 fun DatePickerTextField(
+    initialSelectedDateMillis: Long? = null,
     onDateMillisSelected: (Long?) -> Unit,
 ) {
     var showDialog by remember { mutableStateOf(false) }
-    var selectedDateMillis by remember { mutableStateOf<Long?>(null) }
 
-    val datePickerState = rememberDatePickerState()
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = initialSelectedDateMillis,
+    )
 
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth(),
-        value = selectedDateMillis?.toFormattedDate() ?: "",
+        value = datePickerState.selectedDateMillis?.toFormattedDate() ?: "",
         onValueChange = {},
         label = { Text("Date") },
         readOnly = true,
@@ -56,8 +58,7 @@ fun DatePickerTextField(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        selectedDateMillis = datePickerState.selectedDateMillis
-                        onDateMillisSelected(selectedDateMillis)
+                        onDateMillisSelected(datePickerState.selectedDateMillis)
                         showDialog = false
                     }
                 ) {
