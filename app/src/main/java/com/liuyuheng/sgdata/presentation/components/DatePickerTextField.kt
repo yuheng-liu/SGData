@@ -4,10 +4,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
@@ -27,12 +29,18 @@ import com.liuyuheng.sgdata.utils.toFormattedDate
 @Composable
 fun DatePickerTextField(
     initialSelectedDateMillis: Long? = null,
+    upToDate: Long? = null,
     onDateMillisSelected: (Long?) -> Unit,
 ) {
     var showDialog by remember { mutableStateOf(false) }
 
     val datePickerState = rememberDatePickerState(
         initialSelectedDateMillis = initialSelectedDateMillis,
+        selectableDates = upToDate?.let {
+            object : SelectableDates {
+                override fun isSelectableDate(utcTimeMillis: Long) = utcTimeMillis <= upToDate
+            }
+        } ?: DatePickerDefaults.AllDates
     )
 
     OutlinedTextField(

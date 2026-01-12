@@ -19,6 +19,8 @@ import com.liuyuheng.sgdata.presentation.components.DatePickerTextField
 import com.liuyuheng.sgdata.presentation.main.BasePreviewComposable
 import com.liuyuheng.sgdata.presentation.main.theme.Dimensions
 import com.liuyuheng.sgdata.presentation.shared.SGDataSpacer
+import com.liuyuheng.sgdata.presentation.shared.dialog.DialogTypes
+import com.liuyuheng.sgdata.presentation.shared.dialog.HttpErrorDialog
 import com.liuyuheng.sgdata.presentation.weatherforecast.model.WeatherForecastUi
 import com.liuyuheng.sgdata.presentation.weatherforecast.model.WeatherForecastUiState
 import com.liuyuheng.sgdata.utils.toLocalDate
@@ -29,6 +31,15 @@ fun WeatherForecastScreen(
     viewModel: WeatherForecastViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    when (val currentDialog = uiState.currentDialog) {
+        is DialogTypes.HttpError -> HttpErrorDialog(
+            errorMessage = currentDialog.message,
+            onDismiss = { viewModel.onDismissDialog() },
+        )
+
+        else -> Unit
+    }
 
     WeatherForecastScreen(
         uiState = uiState,
@@ -48,8 +59,12 @@ fun WeatherForecastScreen(
     Column(
         modifier = Modifier.padding(Dimensions.paddingMedium)
     ) {
+        Text(
+            text = "Enter a date to get weather forecast for up to 4 days after"
+        )
         DatePickerTextField(
-            initialSelectedDateMillis = initialSelectedDateMillis
+            initialSelectedDateMillis = initialSelectedDateMillis,
+            upToDate = initialSelectedDateMillis,
         ) { millis ->
             onDateSelected(millis?.toLocalDate())
         }

@@ -78,6 +78,7 @@ dependencies {
     implementation(libs.moshi)
     implementation(libs.converter.moshi)
     implementation(libs.squareup.moshi.kotlin)
+    ksp(libs.moshi.kotlin.codegen)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.activity.ktx)

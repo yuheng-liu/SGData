@@ -2,7 +2,11 @@ package com.liuyuheng.sgdata.presentation.weatherforecast
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.liuyuheng.sgdata.domain.ApiResult
 import com.liuyuheng.sgdata.domain.usecase.GetWeatherForecastsUseCase
+import com.liuyuheng.sgdata.presentation.shared.dialog.DialogTypes
+import com.liuyuheng.sgdata.presentation.shared.loader.LoadingStateHandler
+import com.liuyuheng.sgdata.presentation.shared.loader.withLoading
 import com.liuyuheng.sgdata.presentation.weatherforecast.model.WeatherForecastUiState
 import com.liuyuheng.sgdata.presentation.weatherforecast.model.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,6 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WeatherForecastViewModel @Inject constructor(
+    private val loadingStateHandler: LoadingStateHandler,
     private val getWeatherForecastsUseCase: GetWeatherForecastsUseCase,
 ) : ViewModel() {
 
@@ -36,11 +41,32 @@ class WeatherForecastViewModel @Inject constructor(
     }
 
     fun loadWeatherForecasts() = viewModelScope.launch {
-        val weatherForecast = getWeatherForecastsUseCase.invoke(_uiState.value.selectedDate)
+        loadingStateHandler.withLoading {
+            val weatherForecast = getWeatherForecastsUseCase.invoke(_uiState.value.selectedDate)
+            when (weatherForecast) {
+                is ApiResult.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            weatherForecast = weatherForecast.data.toUi()
+                        )
+                    }
+                }
 
+                is ApiResult.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            currentDialog = DialogTypes.HttpError(weatherForecast.message ?: "")
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    fun onDismissDialog() {
         _uiState.update {
             it.copy(
-                weatherForecast = weatherForecast.toUi()
+                currentDialog = null
             )
         }
     }
