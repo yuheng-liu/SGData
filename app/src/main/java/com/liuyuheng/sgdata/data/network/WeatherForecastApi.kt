@@ -1,14 +1,22 @@
 package com.liuyuheng.sgdata.data.network
 
+import com.liuyuheng.sgdata.data.model.FourDayForecastDto
+import com.liuyuheng.sgdata.data.model.TwentyFourHourForecastDto
 import com.liuyuheng.sgdata.data.network.response.WeatherResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 private const val FOUR_DAY_OUTLOOK = "four-day-outlook"
+private const val TWENTY_FOUR_HOUR_FORECAST = "24-hour-forecast"
 
 interface WeatherForecastApi {
     @GET(FOUR_DAY_OUTLOOK)
-    suspend fun getWeatherForecast(
+    suspend fun getFourDayForecast(
         @Query(value = "date") date: String? = null,
-    ): WeatherResponse
+    ): WeatherResponse<FourDayForecastDto>
+
+    @GET(TWENTY_FOUR_HOUR_FORECAST)
+    suspend fun getTwentyFourHourForecast(
+        @Query(value = "date") date: String? = null,
+    ): WeatherResponse<TwentyFourHourForecastDto>
 }

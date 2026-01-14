@@ -1,9 +1,13 @@
 package com.liuyuheng.sgdata.presentation.weatherforecast.model
 
-import com.liuyuheng.sgdata.domain.model.WeatherForecast
+import com.liuyuheng.sgdata.domain.model.FourDayForecast
+import com.liuyuheng.sgdata.domain.model.weather.RelativeHumidity
+import com.liuyuheng.sgdata.domain.model.weather.Temperature
+import com.liuyuheng.sgdata.domain.model.weather.Wind
 
-fun WeatherForecast.toUi(): WeatherForecastUi {
+fun FourDayForecast.toUi(): WeatherForecastUi {
     return WeatherForecastUi(
+        dataTimestamp = updatedTimestamp?.toLocalTime(),
         forecastsList = forecastsList.map { forecast ->
             WeatherForecastUi.ForecastUi(
                 date = forecast.date.toString(),
@@ -17,20 +21,20 @@ fun WeatherForecast.toUi(): WeatherForecastUi {
     )
 }
 
-private fun getTemperatureString(temperature: WeatherForecast.Forecast.Temperature): String {
+private fun getTemperatureString(temperature: Temperature): String {
     val unit = if (temperature.unit == "Degrees Celsius") "°C" else "°F"
     return "${temperature.low}$unit/${temperature.high}$unit"
 }
 
-private fun getRelativeHumidityString(relativeHumidity: WeatherForecast.Forecast.RelativeHumidity): String {
+private fun getRelativeHumidityString(relativeHumidity: RelativeHumidity): String {
     val unit = if (relativeHumidity.unit == "Percentage") "%" else ""
     return "${relativeHumidity.low}$unit/${relativeHumidity.high}$unit"
 }
 
-private fun getWindString(wind: WeatherForecast.Forecast.Wind): String {
+private fun getWindString(wind: Wind): String {
     return "${wind.speed.low}/${wind.speed.high} ${wind.direction}"
 }
 
-private fun getDetailsString(details: WeatherForecast.Forecast.ForecastDetails): String {
+private fun getDetailsString(details: FourDayForecast.Forecast.ForecastDetails): String {
     return "(${details.code}) ${details.text.displayString}, ${details.summary}"
 }

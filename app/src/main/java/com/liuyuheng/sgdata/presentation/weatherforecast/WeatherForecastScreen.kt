@@ -23,8 +23,9 @@ import com.liuyuheng.sgdata.presentation.shared.dialog.DialogTypes
 import com.liuyuheng.sgdata.presentation.shared.dialog.HttpErrorDialog
 import com.liuyuheng.sgdata.presentation.weatherforecast.model.WeatherForecastUi
 import com.liuyuheng.sgdata.presentation.weatherforecast.model.WeatherForecastUiState
-import com.liuyuheng.sgdata.utils.toLocalDate
+import com.liuyuheng.sgdata.utils.toLocalDateOrNull
 import java.time.LocalDate
+import java.time.LocalTime
 
 @Composable
 fun WeatherForecastScreen(
@@ -60,13 +61,13 @@ fun WeatherForecastScreen(
         modifier = Modifier.padding(Dimensions.paddingMedium)
     ) {
         Text(
-            text = "Enter a date to get weather forecast for up to 4 days after"
+            text = "Enter a date to get weather forecast for up to 4 days"
         )
         DatePickerTextField(
             initialSelectedDateMillis = initialSelectedDateMillis,
             upToDate = initialSelectedDateMillis,
         ) { millis ->
-            onDateSelected(millis?.toLocalDate())
+            onDateSelected(millis?.toLocalDateOrNull())
         }
         SGDataSpacer()
         Button(
@@ -75,6 +76,10 @@ fun WeatherForecastScreen(
                 .fillMaxWidth()
         ) {
             Text(text = "Get Forecast")
+        }
+        SGDataSpacer()
+        uiState.weatherForecast.dataTimestamp?.let { timestamp ->
+            Text(text = "Forecast data last updated at: ${timestamp.hour}:${timestamp.minute}.")
         }
         SGDataSpacer()
         ForecastList(uiState.weatherForecast.forecastsList)
@@ -116,6 +121,7 @@ fun WeatherForecastScreenPreview() {
         WeatherForecastScreen(
             uiState = WeatherForecastUiState(
                 weatherForecast = WeatherForecastUi(
+                    dataTimestamp = LocalTime.of(12, 13, 14),
                     forecastsList = listOf(
                         WeatherForecastUi.ForecastUi(
                             date = "2026-01-01",

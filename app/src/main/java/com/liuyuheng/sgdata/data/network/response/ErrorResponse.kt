@@ -3,7 +3,8 @@ package com.liuyuheng.sgdata.data.network.response
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class WeatherResponse<T>(
+data class ErrorResponse(
     val code: Int,
-    val data: T? = null,
+    val name: String = "",
+    val errorMsg: String = "",
 )

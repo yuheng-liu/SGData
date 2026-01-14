@@ -1,6 +1,7 @@
 package com.liuyuheng.sgdata.data.network
 
-import com.liuyuheng.sgdata.data.network.response.WeatherResponse
+import android.util.Log
+import com.liuyuheng.sgdata.data.network.response.ErrorResponse
 import com.liuyuheng.sgdata.domain.ApiResult
 import com.liuyuheng.sgdata.utils.Constants
 import com.squareup.moshi.Moshi
@@ -16,8 +17,9 @@ suspend inline fun <T> safeApiCall(
         val result = apiCall()
         ApiResult.Success(result)
     } catch (e: HttpException) {
+        Log.e("safeApiCall", e.toString())
         e.response()?.errorBody()?.string()?.let { errorBody ->
-            val moshiAdapter = Moshi.Builder().build().adapter(WeatherResponse::class.java)
+            val moshiAdapter = Moshi.Builder().build().adapter(ErrorResponse::class.java)
             val errorResponse = moshiAdapter.fromJson(errorBody)
 
             ApiResult.Error(
@@ -35,8 +37,10 @@ suspend inline fun <T> safeApiCall(
             }
         )
     } catch (e: IOException) {
+        Log.e("safeApiCall", e.toString())
         ApiResult.Error(e, Constants.CONNECTION_ISSUE)
     } catch (e: Exception) {
-        ApiResult.Error(e, Constants.UNAUTHORIZED)
+        Log.e("safeApiCall", e.toString())
+        ApiResult.Error(e, Constants.UNKNOWN_ERROR)
     }
 }

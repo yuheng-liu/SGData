@@ -3,7 +3,7 @@ package com.liuyuheng.sgdata.presentation.weatherforecast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.liuyuheng.sgdata.domain.ApiResult
-import com.liuyuheng.sgdata.domain.usecase.GetWeatherForecastsUseCase
+import com.liuyuheng.sgdata.domain.usecase.GetFourDayForecastUseCase
 import com.liuyuheng.sgdata.presentation.shared.dialog.DialogTypes
 import com.liuyuheng.sgdata.presentation.shared.loader.LoadingStateHandler
 import com.liuyuheng.sgdata.presentation.shared.loader.withLoading
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WeatherForecastViewModel @Inject constructor(
     private val loadingStateHandler: LoadingStateHandler,
-    private val getWeatherForecastsUseCase: GetWeatherForecastsUseCase,
+    private val getFourDayForecastUseCase: GetFourDayForecastUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(WeatherForecastUiState())
@@ -42,12 +42,12 @@ class WeatherForecastViewModel @Inject constructor(
 
     fun loadWeatherForecasts() = viewModelScope.launch {
         loadingStateHandler.withLoading {
-            val weatherForecast = getWeatherForecastsUseCase.invoke(_uiState.value.selectedDate)
-            when (weatherForecast) {
+            val fourDayForecast = getFourDayForecastUseCase.invoke(_uiState.value.selectedDate)
+            when (fourDayForecast) {
                 is ApiResult.Success -> {
                     _uiState.update {
                         it.copy(
-                            weatherForecast = weatherForecast.data.toUi()
+                            weatherForecast = fourDayForecast.data.toUi()
                         )
                     }
                 }
@@ -55,7 +55,7 @@ class WeatherForecastViewModel @Inject constructor(
                 is ApiResult.Error -> {
                     _uiState.update {
                         it.copy(
-                            currentDialog = DialogTypes.HttpError(weatherForecast.message ?: "")
+                            currentDialog = DialogTypes.HttpError(fourDayForecast.message ?: "")
                         )
                     }
                 }

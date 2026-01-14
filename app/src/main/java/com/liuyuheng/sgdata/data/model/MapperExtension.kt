@@ -1,41 +1,48 @@
 package com.liuyuheng.sgdata.data.model
 
-import com.liuyuheng.sgdata.domain.model.WeatherForecast
-import com.liuyuheng.sgdata.utils.toLocalDate
+import com.liuyuheng.sgdata.domain.model.FourDayForecast
+import com.liuyuheng.sgdata.domain.model.weather.RelativeHumidity
+import com.liuyuheng.sgdata.domain.model.weather.Temperature
+import com.liuyuheng.sgdata.domain.model.weather.WeatherText
+import com.liuyuheng.sgdata.domain.model.weather.Wind
+import com.liuyuheng.sgdata.utils.toLocalDateOrNull
+import com.liuyuheng.sgdata.utils.toLocalDateTimeOrNull
 import java.time.DayOfWeek
 import java.time.Instant
 import java.time.ZoneId
 
-fun WeatherForecastDto.toDomain(): WeatherForecast {
-    return WeatherForecast(
-        startDate = records.firstOrNull()?.date?.toLocalDate(),
+fun FourDayForecastDto.toDomain(): FourDayForecast {
+    val latestRecord = records.maxByOrNull { it.updatedTimestamp }
+    return FourDayForecast(
+        startDate = latestRecord?.date?.toLocalDateOrNull(),
+        updatedTimestamp = latestRecord?.updatedTimestamp?.toLocalDateTimeOrNull(),
         forecastsList = records.maxByOrNull { it.updatedTimestamp }?.forecasts?.map { dtoForecast ->
-            WeatherForecast.Forecast(
+            FourDayForecast.Forecast(
                 date = Instant.parse(dtoForecast.timestamp)
                     .atZone(ZoneId.systemDefault())
                     .toLocalDate(),
                 dayOfWeek = DayOfWeek.valueOf(dtoForecast.day.name),
-                temperature = WeatherForecast.Forecast.Temperature(
+                temperature = Temperature(
                     low = dtoForecast.temperature.low,
                     high = dtoForecast.temperature.high,
                     unit = dtoForecast.temperature.unit,
                 ),
-                relativeHumidity = WeatherForecast.Forecast.RelativeHumidity(
+                relativeHumidity = RelativeHumidity(
                     low = dtoForecast.relativeHumidity.low,
                     high = dtoForecast.relativeHumidity.high,
                     unit = dtoForecast.relativeHumidity.unit,
                 ),
-                wind = WeatherForecast.Forecast.Wind(
-                    speed = WeatherForecast.Forecast.Wind.WindSpeed(
+                wind = Wind(
+                    speed = Wind.WindSpeed(
                         low = dtoForecast.wind.speed.low,
                         high = dtoForecast.wind.speed.high,
                     ),
                     direction = dtoForecast.wind.direction,
                 ),
-                details = WeatherForecast.Forecast.ForecastDetails(
+                details = FourDayForecast.Forecast.ForecastDetails(
                     summary = dtoForecast.forecast.summary,
                     code = dtoForecast.forecast.code,
-                    text = WeatherForecast.Forecast.ForecastDetails.WeatherText.valueOf(
+                    text = WeatherText.valueOf(
                         dtoForecast.forecast.text.name
                     ),
                 ),
