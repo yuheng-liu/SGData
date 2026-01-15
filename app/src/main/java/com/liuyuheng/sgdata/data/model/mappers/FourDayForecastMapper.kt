@@ -1,5 +1,6 @@
-package com.liuyuheng.sgdata.data.model
+package com.liuyuheng.sgdata.data.model.mappers
 
+import com.liuyuheng.sgdata.data.model.FourDayForecastDto
 import com.liuyuheng.sgdata.domain.model.FourDayForecast
 import com.liuyuheng.sgdata.domain.model.weather.RelativeHumidity
 import com.liuyuheng.sgdata.domain.model.weather.Temperature
@@ -12,11 +13,11 @@ import java.time.Instant
 import java.time.ZoneId
 
 fun FourDayForecastDto.toDomain(): FourDayForecast {
-    val latestRecord = records.maxByOrNull { it.updatedTimestamp }
+    val latestRecord = records.maxBy { it.updatedTimestamp }
     return FourDayForecast(
-        startDate = latestRecord?.date?.toLocalDateOrNull(),
-        updatedTimestamp = latestRecord?.updatedTimestamp?.toLocalDateTimeOrNull(),
-        forecastsList = records.maxByOrNull { it.updatedTimestamp }?.forecasts?.map { dtoForecast ->
+        startDate = latestRecord.date.toLocalDateOrNull(),
+        updatedTimestamp = latestRecord.updatedTimestamp.toLocalDateTimeOrNull(),
+        forecastsList = latestRecord.forecasts.map { dtoForecast ->
             FourDayForecast.Forecast(
                 date = Instant.parse(dtoForecast.timestamp)
                     .atZone(ZoneId.systemDefault())
@@ -47,6 +48,6 @@ fun FourDayForecastDto.toDomain(): FourDayForecast {
                     ),
                 ),
             )
-        } ?: emptyList()
+        }
     )
 }

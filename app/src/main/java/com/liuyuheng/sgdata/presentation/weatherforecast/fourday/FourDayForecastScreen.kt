@@ -1,4 +1,4 @@
-package com.liuyuheng.sgdata.presentation.weatherforecast
+package com.liuyuheng.sgdata.presentation.weatherforecast.fourday
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.liuyuheng.sgdata.presentation.components.DatePickerTextField
 import com.liuyuheng.sgdata.presentation.main.BasePreviewComposable
@@ -21,15 +20,15 @@ import com.liuyuheng.sgdata.presentation.main.theme.Dimensions
 import com.liuyuheng.sgdata.presentation.shared.SGDataSpacer
 import com.liuyuheng.sgdata.presentation.shared.dialog.DialogTypes
 import com.liuyuheng.sgdata.presentation.shared.dialog.HttpErrorDialog
-import com.liuyuheng.sgdata.presentation.weatherforecast.model.WeatherForecastUi
-import com.liuyuheng.sgdata.presentation.weatherforecast.model.WeatherForecastUiState
+import com.liuyuheng.sgdata.presentation.weatherforecast.WeatherForecastViewModel
 import com.liuyuheng.sgdata.utils.toLocalDateOrNull
 import java.time.LocalDate
 import java.time.LocalTime
 
 @Composable
-fun WeatherForecastScreen(
-    viewModel: WeatherForecastViewModel = hiltViewModel(),
+fun FourDayForecastScreen(
+    viewModel: WeatherForecastViewModel,
+    onNavigateToTwentyFourHourForecastScreen: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -42,20 +41,24 @@ fun WeatherForecastScreen(
         else -> Unit
     }
 
-    WeatherForecastScreen(
+    FourDayForecastScreen(
         uiState = uiState,
         initialSelectedDateMillis = viewModel.todayMillis,
         onDateSelected = viewModel::setSelectedDate,
         onButtonClicked = viewModel::loadWeatherForecasts,
+        onForecastCardClicked = viewModel::onForecastCardSelected,
+        onNavigateToTwentyFourHourForecastScreen = onNavigateToTwentyFourHourForecastScreen,
     )
 }
 
 @Composable
-fun WeatherForecastScreen(
-    uiState: WeatherForecastUiState,
+fun FourDayForecastScreen(
+    uiState: FourDayForecastUiState,
     initialSelectedDateMillis: Long?,
     onDateSelected: (LocalDate?) -> Unit,
     onButtonClicked: () -> Unit,
+    onForecastCardClicked: (FourDayForecastUi.ForecastUi) -> Unit,
+    onNavigateToTwentyFourHourForecastScreen: () -> Unit,
 ) {
     Column(
         modifier = Modifier.padding(Dimensions.paddingMedium)
@@ -78,17 +81,23 @@ fun WeatherForecastScreen(
             Text(text = "Get Forecast")
         }
         SGDataSpacer()
-        uiState.weatherForecast.dataTimestamp?.let { timestamp ->
+        uiState.fourDayForecast.dataTimestamp?.let { timestamp ->
             Text(text = "Forecast data last updated at: ${timestamp.hour}:${timestamp.minute}.")
         }
         SGDataSpacer()
-        ForecastList(uiState.weatherForecast.forecastsList)
+        ForecastList(
+            forecastList = uiState.fourDayForecast.forecastsList,
+            onForecastCardClicked = onForecastCardClicked,
+            onNavigateToTwentyFourHourForecastScreen = onNavigateToTwentyFourHourForecastScreen
+        )
     }
 }
 
 @Composable
 private fun ForecastList(
-    forecastList: List<WeatherForecastUi.ForecastUi>,
+    forecastList: List<FourDayForecastUi.ForecastUi>,
+    onForecastCardClicked: (FourDayForecastUi.ForecastUi) -> Unit,
+    onNavigateToTwentyFourHourForecastScreen: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -97,6 +106,10 @@ private fun ForecastList(
         items(forecastList.size) { index ->
             val forecast = forecastList[index]
             Card(
+                onClick = {
+                    onForecastCardClicked(forecast)
+                    onNavigateToTwentyFourHourForecastScreen()
+                },
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Column(
@@ -118,12 +131,12 @@ private fun ForecastList(
 @Composable
 fun WeatherForecastScreenPreview() {
     BasePreviewComposable {
-        WeatherForecastScreen(
-            uiState = WeatherForecastUiState(
-                weatherForecast = WeatherForecastUi(
+        FourDayForecastScreen(
+            uiState = FourDayForecastUiState(
+                fourDayForecast = FourDayForecastUi(
                     dataTimestamp = LocalTime.of(12, 13, 14),
                     forecastsList = listOf(
-                        WeatherForecastUi.ForecastUi(
+                        FourDayForecastUi.ForecastUi(
                             date = "2026-01-01",
                             dayOfWeek = "Monday",
                             temperature = "24°C/33°C",
@@ -131,7 +144,7 @@ fun WeatherForecastScreenPreview() {
                             wind = "15/25 NE",
                             details = "FA: Fair Day, Fair",
                         ),
-                        WeatherForecastUi.ForecastUi(
+                        FourDayForecastUi.ForecastUi(
                             date = "2026-01-02",
                             dayOfWeek = "Tuesday",
                             temperature = "22°C/30°C",
@@ -145,6 +158,8 @@ fun WeatherForecastScreenPreview() {
             initialSelectedDateMillis = null,
             onDateSelected = {},
             onButtonClicked = {},
+            onForecastCardClicked = {},
+            onNavigateToTwentyFourHourForecastScreen = {}
         )
     }
 }

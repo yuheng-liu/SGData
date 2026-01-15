@@ -1,15 +1,15 @@
-package com.liuyuheng.sgdata.presentation.weatherforecast.model
+package com.liuyuheng.sgdata.presentation.weatherforecast.fourday
 
 import com.liuyuheng.sgdata.domain.model.FourDayForecast
 import com.liuyuheng.sgdata.domain.model.weather.RelativeHumidity
 import com.liuyuheng.sgdata.domain.model.weather.Temperature
 import com.liuyuheng.sgdata.domain.model.weather.Wind
 
-fun FourDayForecast.toUi(): WeatherForecastUi {
-    return WeatherForecastUi(
+fun FourDayForecast.toUi(): FourDayForecastUi {
+    return FourDayForecastUi(
         dataTimestamp = updatedTimestamp?.toLocalTime(),
         forecastsList = forecastsList.map { forecast ->
-            WeatherForecastUi.ForecastUi(
+            FourDayForecastUi.ForecastUi(
                 date = forecast.date.toString(),
                 dayOfWeek = forecast.dayOfWeek.toString(),
                 temperature = getTemperatureString(forecast.temperature),

@@ -4,11 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.liuyuheng.sgdata.domain.ApiResult
 import com.liuyuheng.sgdata.domain.usecase.GetFourDayForecastUseCase
+import com.liuyuheng.sgdata.domain.usecase.GetTwentyFourHourForecastUseCase
 import com.liuyuheng.sgdata.presentation.shared.dialog.DialogTypes
 import com.liuyuheng.sgdata.presentation.shared.loader.LoadingStateHandler
 import com.liuyuheng.sgdata.presentation.shared.loader.withLoading
-import com.liuyuheng.sgdata.presentation.weatherforecast.model.WeatherForecastUiState
-import com.liuyuheng.sgdata.presentation.weatherforecast.model.toUi
+import com.liuyuheng.sgdata.presentation.weatherforecast.fourday.FourDayForecastUi
+import com.liuyuheng.sgdata.presentation.weatherforecast.fourday.FourDayForecastUiState
+import com.liuyuheng.sgdata.presentation.weatherforecast.fourday.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,9 +24,10 @@ import javax.inject.Inject
 class WeatherForecastViewModel @Inject constructor(
     private val loadingStateHandler: LoadingStateHandler,
     private val getFourDayForecastUseCase: GetFourDayForecastUseCase,
+    private val getTwentyFourHourForecastUseCase: GetTwentyFourHourForecastUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(WeatherForecastUiState())
+    private val _uiState = MutableStateFlow(FourDayForecastUiState())
     val uiState = _uiState.asStateFlow()
 
     val todayMillis: Long = LocalDate.now()
@@ -42,12 +45,11 @@ class WeatherForecastViewModel @Inject constructor(
 
     fun loadWeatherForecasts() = viewModelScope.launch {
         loadingStateHandler.withLoading {
-            val fourDayForecast = getFourDayForecastUseCase.invoke(_uiState.value.selectedDate)
-            when (fourDayForecast) {
+            when (val fourDayForecast = getFourDayForecastUseCase.invoke(_uiState.value.selectedDate)) {
                 is ApiResult.Success -> {
                     _uiState.update {
                         it.copy(
-                            weatherForecast = fourDayForecast.data.toUi()
+                            fourDayForecast = fourDayForecast.data.toUi()
                         )
                     }
                 }
@@ -60,6 +62,14 @@ class WeatherForecastViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun onForecastCardSelected(data: FourDayForecastUi.ForecastUi) {
+        _uiState.update {
+            it.copy(
+                selectedForecast = data
+            )
         }
     }
 

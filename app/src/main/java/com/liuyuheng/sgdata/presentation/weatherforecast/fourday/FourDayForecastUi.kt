@@ -1,8 +1,8 @@
-package com.liuyuheng.sgdata.presentation.weatherforecast.model
+package com.liuyuheng.sgdata.presentation.weatherforecast.fourday
 
 import java.time.LocalTime
 
-data class WeatherForecastUi(
+data class FourDayForecastUi(
     val dataTimestamp: LocalTime? = null,
     val forecastsList: List<ForecastUi> = emptyList(),
 ) {

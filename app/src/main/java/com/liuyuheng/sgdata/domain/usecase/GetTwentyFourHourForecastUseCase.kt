@@ -4,9 +4,9 @@ import com.liuyuheng.sgdata.domain.repository.WeatherForecastRepository
 import java.time.LocalDate
 import javax.inject.Inject
 
-class GetFourDayForecastUseCase @Inject constructor(
+class GetTwentyFourHourForecastUseCase @Inject constructor(
     private val weatherForecastRepository: WeatherForecastRepository,
 ) {
 
-    suspend fun invoke(date: LocalDate?) = weatherForecastRepository.getFourDayForecast(date)
+    suspend fun invoke(date: LocalDate?) = weatherForecastRepository.getTwentyFourHourForecast(date)
 }

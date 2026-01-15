@@ -9,10 +9,10 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class FourDayForecastDto(
-    val records: List<WeatherRecord>,
+    val records: List<FourDayForecastRecord>,
 ) {
     @JsonClass(generateAdapter = true)
-    data class WeatherRecord(
+    data class FourDayForecastRecord(
         val date: String, // Date of record
         val updatedTimestamp: String, // 2026-01-03T05:40:50+08:00
         val timestamp: String, // 2026-01-03T05:30:00+08:00
