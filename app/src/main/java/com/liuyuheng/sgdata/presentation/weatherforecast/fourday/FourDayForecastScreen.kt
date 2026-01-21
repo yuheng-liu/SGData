@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,12 +31,12 @@ fun FourDayForecastScreen(
     viewModel: WeatherForecastViewModel,
     onNavigateToTwentyFourHourForecastScreen: () -> Unit,
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.fourDayForecastState.collectAsStateWithLifecycle()
 
     when (val currentDialog = uiState.currentDialog) {
         is DialogTypes.HttpError -> HttpErrorDialog(
             errorMessage = currentDialog.message,
-            onDismiss = { viewModel.onDismissDialog() },
+            onDismiss = { viewModel.onDismissErrorDialog(WeatherForecastViewModel.WeatherForecastType.FOUR_DAY) },
         )
 
         else -> Unit
@@ -45,19 +46,19 @@ fun FourDayForecastScreen(
         uiState = uiState,
         initialSelectedDateMillis = viewModel.todayMillis,
         onDateSelected = viewModel::setSelectedDate,
-        onButtonClicked = viewModel::loadWeatherForecasts,
+        onButtonClicked = viewModel::fetchFourDayForecast,
         onForecastCardClicked = viewModel::onForecastCardSelected,
         onNavigateToTwentyFourHourForecastScreen = onNavigateToTwentyFourHourForecastScreen,
     )
 }
 
 @Composable
-fun FourDayForecastScreen(
+private fun FourDayForecastScreen(
     uiState: FourDayForecastUiState,
     initialSelectedDateMillis: Long?,
     onDateSelected: (LocalDate?) -> Unit,
     onButtonClicked: () -> Unit,
-    onForecastCardClicked: (FourDayForecastUi.ForecastUi) -> Unit,
+    onForecastCardClicked: (FourDayForecastUi.DayForecast) -> Unit,
     onNavigateToTwentyFourHourForecastScreen: () -> Unit,
 ) {
     Column(
@@ -82,7 +83,10 @@ fun FourDayForecastScreen(
         }
         SGDataSpacer()
         uiState.fourDayForecast.dataTimestamp?.let { timestamp ->
-            Text(text = "Forecast data last updated at: ${timestamp.hour}:${timestamp.minute}.")
+            Text(
+                text = "Forecast data last updated at ${timestamp.hour}:${timestamp.minute}",
+                style = MaterialTheme.typography.titleLarge
+            )
         }
         SGDataSpacer()
         ForecastList(
@@ -95,32 +99,38 @@ fun FourDayForecastScreen(
 
 @Composable
 private fun ForecastList(
-    forecastList: List<FourDayForecastUi.ForecastUi>,
-    onForecastCardClicked: (FourDayForecastUi.ForecastUi) -> Unit,
+    forecastList: List<FourDayForecastUi.DayForecast>,
+    onForecastCardClicked: (FourDayForecastUi.DayForecast) -> Unit,
     onNavigateToTwentyFourHourForecastScreen: () -> Unit
 ) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(Dimensions.paddingMedium)
-    ) {
-        items(forecastList.size) { index ->
-            val forecast = forecastList[index]
-            Card(
-                onClick = {
-                    onForecastCardClicked(forecast)
-                    onNavigateToTwentyFourHourForecastScreen()
-                },
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Column(
-                    modifier = Modifier.padding(Dimensions.paddingMedium)
+    if (forecastList.isNotEmpty()) {
+        SGDataSpacer()
+        Text(
+            text = "Select any of the cards below to see the detailed forecast for 24hrs, up to today"
+        )
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(Dimensions.paddingMedium)
+        ) {
+            items(forecastList.size) { index ->
+                val forecast = forecastList[index]
+                Card(
+                    onClick = {
+                        onForecastCardClicked(forecast)
+                        onNavigateToTwentyFourHourForecastScreen()
+                    },
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Text(text = "Date: ${forecast.date}")
-                    Text(text = "Day Of Week: ${forecast.dayOfWeek}")
-                    Text(text = "Temperature: ${forecast.temperature}")
-                    Text(text = "Relative Humidity: ${forecast.relativeHumidity}")
-                    Text(text = "Wind: ${forecast.wind}")
-                    Text(text = "Details: ${forecast.details}")
+                    Column(
+                        modifier = Modifier.padding(Dimensions.paddingMedium)
+                    ) {
+                        Text(text = "Date: ${forecast.date}")
+                        Text(text = "Day Of Week: ${forecast.dayOfWeek}")
+                        Text(text = "Temperature: ${forecast.temperature}")
+                        Text(text = "Relative Humidity: ${forecast.relativeHumidity}")
+                        Text(text = "Wind: ${forecast.wind}")
+                        Text(text = "Details: ${forecast.details}")
+                    }
                 }
             }
         }
@@ -129,22 +139,22 @@ private fun ForecastList(
 
 @Preview
 @Composable
-fun WeatherForecastScreenPreview() {
+private fun WeatherForecastScreenPreview() {
     BasePreviewComposable {
         FourDayForecastScreen(
             uiState = FourDayForecastUiState(
                 fourDayForecast = FourDayForecastUi(
                     dataTimestamp = LocalTime.of(12, 13, 14),
                     forecastsList = listOf(
-                        FourDayForecastUi.ForecastUi(
+                        FourDayForecastUi.DayForecast(
                             date = "2026-01-01",
                             dayOfWeek = "Monday",
-                            temperature = "24°C/33°C",
-                            relativeHumidity = "55/85%",
+                            temperature = "24°C - 33°C",
+                            relativeHumidity = "55% - 85%",
                             wind = "15/25 NE",
                             details = "FA: Fair Day, Fair",
                         ),
-                        FourDayForecastUi.ForecastUi(
+                        FourDayForecastUi.DayForecast(
                             date = "2026-01-02",
                             dayOfWeek = "Tuesday",
                             temperature = "22°C/30°C",

@@ -12,7 +12,7 @@ import androidx.navigation.navigation
 import com.liuyuheng.sgdata.presentation.main.navigation.AppRoute
 import com.liuyuheng.sgdata.presentation.weatherforecast.WeatherForecastViewModel
 import com.liuyuheng.sgdata.presentation.weatherforecast.fourday.FourDayForecastScreen
-import com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhours.TwentyFourHoursForecastScreen
+import com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour.TwentyFourHoursForecastScreen
 
 fun NavGraphBuilder.weatherForecastGraph(navController: NavHostController) {
     navigation(

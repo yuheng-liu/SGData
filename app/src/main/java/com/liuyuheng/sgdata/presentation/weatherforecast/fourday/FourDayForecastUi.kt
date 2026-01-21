@@ -4,9 +4,9 @@ import java.time.LocalTime
 
 data class FourDayForecastUi(
     val dataTimestamp: LocalTime? = null,
-    val forecastsList: List<ForecastUi> = emptyList(),
+    val forecastsList: List<DayForecast> = emptyList(),
 ) {
-    data class ForecastUi(
+    data class DayForecast(
         val date: String,
         val dayOfWeek: String,
         val temperature: String,

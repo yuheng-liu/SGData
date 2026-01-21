@@ -7,7 +7,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 private const val FOUR_DAY_OUTLOOK = "four-day-outlook"
-private const val TWENTY_FOUR_HOUR_FORECAST = "24-hour-forecast"
+private const val TWENTY_FOUR_HOUR_FORECAST = "twenty-four-hr-forecast"
 
 interface WeatherForecastApi {
     @GET(FOUR_DAY_OUTLOOK)
