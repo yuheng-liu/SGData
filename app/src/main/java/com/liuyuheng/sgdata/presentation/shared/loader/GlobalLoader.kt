@@ -9,14 +9,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.liuyuheng.sgdata.presentation.main.BasePreviewComposable
-import com.liuyuheng.sgdata.presentation.main.theme.BackgroundDark
+import com.liuyuheng.sgdata.presentation.main.theme.onBackgroundLight
 
 @Composable
 fun GlobalLoader() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(BackgroundDark.copy(alpha = 0.2f)),
+            .background(onBackgroundLight.copy(alpha = 0.2f)),
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator()

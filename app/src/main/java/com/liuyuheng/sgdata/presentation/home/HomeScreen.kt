@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,8 +24,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.liuyuheng.sgdata.R
 import com.liuyuheng.sgdata.presentation.main.BasePreviewComposable
 import com.liuyuheng.sgdata.presentation.main.theme.Dimensions
-import com.liuyuheng.sgdata.presentation.main.theme.OnSurfaceLight
-import com.liuyuheng.sgdata.presentation.main.theme.SurfaceLight
+import com.liuyuheng.sgdata.presentation.main.theme.onPrimaryContainerLight
+import com.liuyuheng.sgdata.presentation.main.theme.primaryContainerLight
+import com.liuyuheng.sgdata.presentation.shared.SGDataSpacer
 
 @Composable
 fun HomeScreen(
@@ -47,14 +47,6 @@ fun HomeScreen(
     onNavigateToWeatherForecast: () -> Unit,
 ) {
     Column {
-        Text(
-            text = "SG Data",
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(all = Dimensions.paddingLarge),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.headlineLarge
-        )
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(Dimensions.paddingMedium),
@@ -86,8 +78,8 @@ fun ScreenCard(
             .fillMaxSize()
             .padding(all = Dimensions.paddingMedium),
         colors = CardDefaults.cardColors(
-            containerColor = SurfaceLight,
-            contentColor = OnSurfaceLight,
+            containerColor = primaryContainerLight,
+            contentColor = onPrimaryContainerLight,
         ),
     ) {
         Icon(
@@ -102,6 +94,7 @@ fun ScreenCard(
             text = screenType.displayName,
             textAlign = TextAlign.Center,
         )
+        SGDataSpacer()
     }
 }
 
