@@ -1,4 +1,4 @@
-package com.liuyuheng.sgdata.presentation.weatherforecast.navigation
+package com.liuyuheng.sgdata.presentation.weatherforecast
 
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
@@ -10,9 +10,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.liuyuheng.sgdata.presentation.main.navigation.AppRoute
-import com.liuyuheng.sgdata.presentation.weatherforecast.WeatherForecastViewModel
 import com.liuyuheng.sgdata.presentation.weatherforecast.fourday.FourDayForecastScreen
 import com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour.TwentyFourHoursForecastScreen
+import com.liuyuheng.sgdata.presentation.weatherforecast.twohour.TwoHourForecastScreen
 
 fun NavGraphBuilder.weatherForecastGraph(navController: NavHostController) {
     navigation(
@@ -31,6 +31,10 @@ fun NavGraphBuilder.weatherForecastGraph(navController: NavHostController) {
         // Twenty Four Hours Forecast screen
         composable(WeatherForecastRoute.TwentyFourHourForecast.route) {
             TwentyFourHoursForecastScreen(weatherForecastViewModel(navController))
+        }
+        // Two Hours Forecast screen
+        composable(WeatherForecastRoute.TwoHourForecast.route) {
+            TwoHourForecastScreen(weatherForecastViewModel(navController))
         }
     }
 }

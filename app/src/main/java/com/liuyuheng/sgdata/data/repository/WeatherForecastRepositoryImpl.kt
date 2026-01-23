@@ -6,8 +6,11 @@ import com.liuyuheng.sgdata.data.network.safeApiCall
 import com.liuyuheng.sgdata.domain.ApiResult
 import com.liuyuheng.sgdata.domain.model.FourDayForecast
 import com.liuyuheng.sgdata.domain.model.TwentyFourHourForecast
+import com.liuyuheng.sgdata.domain.model.TwoHourForecast
 import com.liuyuheng.sgdata.domain.repository.WeatherForecastRepository
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class WeatherForecastRepositoryImpl @Inject constructor(
@@ -25,5 +28,13 @@ class WeatherForecastRepositoryImpl @Inject constructor(
             val twentyFourHourForecastResponse = weatherForecastApi.getTwentyFourHourForecast(date?.toString())
             twentyFourHourForecastResponse.data?.toDomain() ?: TwentyFourHourForecast()
         }
+
+    override suspend fun getTwoHourForecast(dateTime: LocalDateTime?): ApiResult<TwoHourForecast> {
+        val formattedDateTime = dateTime?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))
+        return safeApiCall {
+            val twoHourForecastResponse = weatherForecastApi.getTwoHourForecast(formattedDateTime)
+            twoHourForecastResponse.data?.toDomain() ?: TwoHourForecast()
+        }
+    }
 }
 

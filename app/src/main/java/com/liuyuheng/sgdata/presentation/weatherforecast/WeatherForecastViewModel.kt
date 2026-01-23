@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.liuyuheng.sgdata.domain.ApiResult
 import com.liuyuheng.sgdata.domain.usecase.GetFourDayForecastUseCase
 import com.liuyuheng.sgdata.domain.usecase.GetTwentyFourHourForecastUseCase
+import com.liuyuheng.sgdata.domain.usecase.GetTwoHourForecastUseCase
 import com.liuyuheng.sgdata.presentation.shared.dialog.DialogTypes
 import com.liuyuheng.sgdata.presentation.shared.loader.LoadingStateHandler
 import com.liuyuheng.sgdata.presentation.shared.loader.withLoading
@@ -13,6 +14,7 @@ import com.liuyuheng.sgdata.presentation.weatherforecast.fourday.FourDayForecast
 import com.liuyuheng.sgdata.presentation.weatherforecast.fourday.toUi
 import com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour.TwentyFourHourForecastUiState
 import com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour.toUi
+import com.liuyuheng.sgdata.presentation.weatherforecast.twohour.TwoHourForecastUiState
 import com.liuyuheng.sgdata.utils.toLocalDateOrNull
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,6 +27,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.ZoneId
 import javax.inject.Inject
 
@@ -32,14 +35,25 @@ import javax.inject.Inject
 class WeatherForecastViewModel @Inject constructor(
     private val loadingStateHandler: LoadingStateHandler,
     private val getFourDayForecastUseCase: GetFourDayForecastUseCase,
-    private val getTwentyFourHourForecastUseCase: GetTwentyFourHourForecastUseCase
+    private val getTwentyFourHourForecastUseCase: GetTwentyFourHourForecastUseCase,
+    private val getTwoHourForecastUseCase: GetTwoHourForecastUseCase
 ) : ViewModel() {
 
-    private val fourDayForecastUiState = MutableStateFlow(FourDayForecastUiState())
-    val fourDayForecastState = fourDayForecastUiState.asStateFlow()
+    // 4 days
+    private val _fourDayForecastUiState = MutableStateFlow(FourDayForecastUiState())
+    val fourDayForecastUiState = _fourDayForecastUiState.asStateFlow()
 
-    private val twentyFourHoursForecastUiState = MutableStateFlow(TwentyFourHourForecastUiState())
-    val twentyFourHoursUiState = twentyFourHoursForecastUiState.asStateFlow()
+    // 24 Hours
+    private val _twentyFourHourForecastUiState = MutableStateFlow(TwentyFourHourForecastUiState())
+    val twentyFourHourForecastUiState = _twentyFourHourForecastUiState.asStateFlow()
+
+    // 2 Hours
+    private val _twoHoursForecastUiState = MutableStateFlow(TwoHourForecastUiState())
+    val twoHoursForecastUiState = _twoHoursForecastUiState.asStateFlow()
+
+    // error dialog
+    private val _dialogState = MutableStateFlow<DialogTypes?>(null)
+    val dialogState = _dialogState.asStateFlow()
 
     val todayMillis: Long = LocalDate.now()
         .atStartOfDay(ZoneId.systemDefault())
@@ -51,7 +65,7 @@ class WeatherForecastViewModel @Inject constructor(
     }
 
     private fun observeSelectedForecastDate() {
-        twentyFourHoursForecastUiState.map { it.selectedDate }
+        _twentyFourHourForecastUiState.map { it.selectedDate }
             .distinctUntilChanged()
             .filterNotNull()
             .onEach {
@@ -61,7 +75,7 @@ class WeatherForecastViewModel @Inject constructor(
     }
 
     fun setSelectedDate(date: LocalDate?) {
-        fourDayForecastUiState.update {
+        _fourDayForecastUiState.update {
             it.copy(
                 selectedDate = date
             )
@@ -70,9 +84,9 @@ class WeatherForecastViewModel @Inject constructor(
 
     fun fetchFourDayForecast() = viewModelScope.launch {
         loadingStateHandler.withLoading {
-            when (val fourDayForecast = getFourDayForecastUseCase.invoke(fourDayForecastUiState.value.selectedDate)) {
+            when (val fourDayForecast = getFourDayForecastUseCase.invoke(_fourDayForecastUiState.value.selectedDate)) {
                 is ApiResult.Success -> {
-                    fourDayForecastUiState.update {
+                    _fourDayForecastUiState.update {
                         it.copy(
                             fourDayForecast = fourDayForecast.data.toUi()
                         )
@@ -80,11 +94,7 @@ class WeatherForecastViewModel @Inject constructor(
                 }
 
                 is ApiResult.Error -> {
-                    fourDayForecastUiState.update {
-                        it.copy(
-                            currentDialog = DialogTypes.HttpError(fourDayForecast.message ?: "")
-                        )
-                    }
+                    _dialogState.value = DialogTypes.HttpError(fourDayForecast.message ?: "")
                 }
             }
         }
@@ -92,9 +102,9 @@ class WeatherForecastViewModel @Inject constructor(
 
     fun fetchTwentyFourHoursForecast() = viewModelScope.launch {
         loadingStateHandler.withLoading {
-            when (val twentyFourHourForecast = getTwentyFourHourForecastUseCase.invoke(twentyFourHoursForecastUiState.value.selectedDate)) {
+            when (val twentyFourHourForecast = getTwentyFourHourForecastUseCase.invoke(_twentyFourHourForecastUiState.value.selectedDate)) {
                 is ApiResult.Success -> {
-                    twentyFourHoursForecastUiState.update {
+                    _twentyFourHourForecastUiState.update {
                         it.copy(
                             twentyFourHourForecast = twentyFourHourForecast.data.toUi()
                         )
@@ -102,42 +112,49 @@ class WeatherForecastViewModel @Inject constructor(
                 }
 
                 is ApiResult.Error -> {
-                    twentyFourHoursForecastUiState.update {
-                        it.copy(
-                            currentDialog = DialogTypes.HttpError(twentyFourHourForecast.message ?: "")
-                        )
-                    }
+                    _dialogState.value = DialogTypes.HttpError(twentyFourHourForecast.message ?: "")
                 }
             }
         }
     }
 
     fun onForecastCardSelected(data: FourDayForecastUi.DayForecast) {
-        twentyFourHoursForecastUiState.update {
+        _twentyFourHourForecastUiState.update {
             it.copy(
                 selectedDate = data.date.toLocalDateOrNull()
             )
         }
     }
 
-    fun onDismissErrorDialog(forecastType: WeatherForecastType) {
-        when (forecastType) {
-            WeatherForecastType.FOUR_DAY -> fourDayForecastUiState.update {
-                it.copy(
-                    currentDialog = null
-                )
-            }
+    fun fetchTwoHourForecast() = viewModelScope.launch {
+        val selectedDateTime = _twentyFourHourForecastUiState.value.selectedDate?.atTime(twoHoursForecastUiState.value.selectedTimeslot)
 
-            WeatherForecastType.TWENTY_FOUR_HOURS -> twentyFourHoursForecastUiState.update {
-                it.copy(
-                    currentDialog = null
-                )
+        loadingStateHandler.withLoading {
+            when (val twoHourForecast = getTwoHourForecastUseCase.invoke(selectedDateTime)) {
+                is ApiResult.Success -> {
+                    _twoHoursForecastUiState.update {
+                        it.copy(
+                            twoHourForecast = twoHourForecast.data
+                        )
+                    }
+                }
+
+                is ApiResult.Error -> {
+                    _dialogState.value = DialogTypes.HttpError(twoHourForecast.message ?: "")
+                }
             }
         }
     }
 
-    enum class WeatherForecastType {
-        FOUR_DAY,
-        TWENTY_FOUR_HOURS
+    fun onTwoHourTimeslotSelected(timeslot: LocalTime) {
+        _twoHoursForecastUiState.update {
+            it.copy(
+                selectedTimeslot = timeslot
+            )
+        }
+    }
+
+    fun onDismissErrorDialog() {
+        _dialogState.value = null
     }
 }

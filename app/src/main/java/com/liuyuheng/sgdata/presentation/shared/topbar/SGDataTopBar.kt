@@ -1,5 +1,6 @@
 package com.liuyuheng.sgdata.presentation.shared.topbar
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -19,6 +20,7 @@ import com.liuyuheng.sgdata.presentation.main.BasePreviewComposable
 fun SGDataTopBar(
     title: String,
     onBackClicked: (() -> Unit)? = null,
+    actions: @Composable RowScope.() -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
@@ -41,7 +43,8 @@ fun SGDataTopBar(
                     )
                 }
             }
-        }
+        },
+        actions = actions
     )
 }
 

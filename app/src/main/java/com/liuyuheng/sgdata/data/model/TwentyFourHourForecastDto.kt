@@ -2,6 +2,7 @@ package com.liuyuheng.sgdata.data.model
 
 import com.liuyuheng.sgdata.data.model.weather.RelativeHumidity
 import com.liuyuheng.sgdata.data.model.weather.Temperature
+import com.liuyuheng.sgdata.data.model.weather.ValidPeriod
 import com.liuyuheng.sgdata.data.model.weather.WeatherText
 import com.liuyuheng.sgdata.data.model.weather.Wind
 import com.squareup.moshi.JsonClass
@@ -30,13 +31,6 @@ data class TwentyFourHourForecastDto(
             data class Forecast(
                 val code: String,
                 val text: WeatherText
-            )
-
-            @JsonClass(generateAdapter = true)
-            data class ValidPeriod(
-                val start: String,
-                val end: String,
-                val text: String
             )
         }
 

@@ -29,12 +29,13 @@ import java.time.LocalDateTime
 fun TwentyFourHoursForecastScreen(
     viewModel: WeatherForecastViewModel,
 ) {
-    val uiState by viewModel.twentyFourHoursUiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.twentyFourHourForecastUiState.collectAsStateWithLifecycle()
+    val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
 
-    when (val currentDialog = uiState.currentDialog) {
+    when (val currentDialog = dialogState) {
         is DialogTypes.HttpError -> HttpErrorDialog(
             errorMessage = currentDialog.message,
-            onDismiss = { viewModel.onDismissErrorDialog(WeatherForecastViewModel.WeatherForecastType.TWENTY_FOUR_HOURS) },
+            onDismiss = { viewModel.onDismissErrorDialog() },
         )
 
         else -> Unit
@@ -59,6 +60,7 @@ fun TwentyFourHoursForecastScreen(
         modifier = Modifier.padding(Dimensions.paddingMedium)
     ) {
         Text("24Hrs forecast for ${uiState.selectedDate.toString()}")
+        Text("Click the top right icon for 2 hours forecast")
         SGDataSpacer()
         Card(
             modifier = Modifier.fillMaxWidth()

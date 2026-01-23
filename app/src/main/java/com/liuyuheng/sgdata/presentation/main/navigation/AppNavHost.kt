@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.liuyuheng.sgdata.presentation.home.HomeScreen
-import com.liuyuheng.sgdata.presentation.weatherforecast.navigation.weatherForecastGraph
+import com.liuyuheng.sgdata.presentation.weatherforecast.weatherForecastGraph
 
 @Composable
 fun AppNavHost(

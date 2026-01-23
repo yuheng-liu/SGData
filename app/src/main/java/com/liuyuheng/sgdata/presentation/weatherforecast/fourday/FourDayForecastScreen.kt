@@ -15,10 +15,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.liuyuheng.sgdata.presentation.components.DatePickerTextField
 import com.liuyuheng.sgdata.presentation.main.BasePreviewComposable
 import com.liuyuheng.sgdata.presentation.main.theme.Dimensions
 import com.liuyuheng.sgdata.presentation.shared.SGDataSpacer
+import com.liuyuheng.sgdata.presentation.shared.datepickertextfield.DatePickerTextField
 import com.liuyuheng.sgdata.presentation.shared.dialog.DialogTypes
 import com.liuyuheng.sgdata.presentation.shared.dialog.HttpErrorDialog
 import com.liuyuheng.sgdata.presentation.weatherforecast.WeatherForecastViewModel
@@ -31,12 +31,13 @@ fun FourDayForecastScreen(
     viewModel: WeatherForecastViewModel,
     onNavigateToTwentyFourHourForecastScreen: () -> Unit,
 ) {
-    val uiState by viewModel.fourDayForecastState.collectAsStateWithLifecycle()
+    val uiState by viewModel.fourDayForecastUiState.collectAsStateWithLifecycle()
+    val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
 
-    when (val currentDialog = uiState.currentDialog) {
+    when (val currentDialog = dialogState) {
         is DialogTypes.HttpError -> HttpErrorDialog(
             errorMessage = currentDialog.message,
-            onDismiss = { viewModel.onDismissErrorDialog(WeatherForecastViewModel.WeatherForecastType.FOUR_DAY) },
+            onDismiss = { viewModel.onDismissErrorDialog() },
         )
 
         else -> Unit
@@ -108,6 +109,7 @@ private fun ForecastList(
         Text(
             text = "Select any of the cards below to see the detailed forecast for 24hrs, up to today"
         )
+        SGDataSpacer()
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(Dimensions.paddingMedium)
