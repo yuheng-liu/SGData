@@ -1,4 +1,4 @@
-package com.liuyuheng.sgdata.data.network
+package com.liuyuheng.sgdata.data.repository
 
 import android.util.Log
 import com.liuyuheng.sgdata.data.network.response.ErrorResponse

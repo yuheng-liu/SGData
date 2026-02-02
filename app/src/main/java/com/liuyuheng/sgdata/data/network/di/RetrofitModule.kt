@@ -13,7 +13,8 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-private const val DATA_GOV_BASE_URL = "https://api-open.data.gov.sg/v2/real-time/api/"
+private const val DATA_GOV_REAL_TIME_DATA_URL = "https://api-open.data.gov.sg/v2/real-time/api/"
+private const val DATA_GOV_DATA_STORE_SEARCH_URL = "https://data.gov.sg/api/action/datastore_search/"
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -37,11 +38,24 @@ object RetrofitModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(
+    @RealTimeEndpoint
+    fun provideRealTimeRetrofit(
         client: OkHttpClient,
         moshi: Moshi,
     ): Retrofit = Retrofit.Builder()
-        .baseUrl(DATA_GOV_BASE_URL)
+        .baseUrl(DATA_GOV_REAL_TIME_DATA_URL)
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .client(client)
+        .build()
+
+    @Singleton
+    @Provides
+    @DataStoreSearchEndpoint
+    fun provideDataStoreSearchRetrofit(
+        client: OkHttpClient,
+        moshi: Moshi,
+    ): Retrofit = Retrofit.Builder()
+        .baseUrl(DATA_GOV_DATA_STORE_SEARCH_URL)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .client(client)
         .build()

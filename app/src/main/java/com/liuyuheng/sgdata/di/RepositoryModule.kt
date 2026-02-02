@@ -1,6 +1,8 @@
 package com.liuyuheng.sgdata.di
 
+import com.liuyuheng.sgdata.data.repository.CarparkInfoRepositoryImpl
 import com.liuyuheng.sgdata.data.repository.WeatherForecastRepositoryImpl
+import com.liuyuheng.sgdata.domain.repository.CarparkInfoRepository
 import com.liuyuheng.sgdata.domain.repository.WeatherForecastRepository
 import dagger.Binds
 import dagger.Module
@@ -17,4 +19,10 @@ abstract class RepositoryModule {
     abstract fun bindWeatherForecastRepository(
         impl: WeatherForecastRepositoryImpl,
     ): WeatherForecastRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindCarparkInfoRepository(
+        impl: CarparkInfoRepositoryImpl,
+    ): CarparkInfoRepository
 }

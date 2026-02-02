@@ -25,4 +25,5 @@ class HomeViewModel @Inject constructor() : ViewModel() {
 
 enum class ScreenType(val displayName: String, val icon: Int) {
     WEATHER_FORECAST("Weather Forecast", R.drawable.image_weather),
+    CARPARK_AVAILABILITY("Carpark Availability", R.drawable.image_carpark),
 }

@@ -11,19 +11,21 @@ private const val FOUR_DAY_OUTLOOK = "four-day-outlook"
 private const val TWENTY_FOUR_HOUR_FORECAST = "twenty-four-hr-forecast"
 private const val TWO_HOUR_FORECAST = "two-hr-forecast"
 
+private const val QUERY_DATE = "date"
+
 interface WeatherForecastApi {
     @GET(FOUR_DAY_OUTLOOK)
     suspend fun getFourDayForecast(
-        @Query(value = "date") date: String? = null,
+        @Query(value = QUERY_DATE) date: String? = null,
     ): WeatherResponse<FourDayForecastDto>
 
     @GET(TWENTY_FOUR_HOUR_FORECAST)
     suspend fun getTwentyFourHourForecast(
-        @Query(value = "date") date: String? = null,
+        @Query(value = QUERY_DATE) date: String? = null,
     ): WeatherResponse<TwentyFourHourForecastDto>
 
     @GET(TWO_HOUR_FORECAST)
     suspend fun getTwoHourForecast(
-        @Query(value = "date") date: String? = null,
+        @Query(value = QUERY_DATE) date: String? = null,
     ): WeatherResponse<TwoHourForecastDto>
 }

@@ -21,7 +21,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.liuyuheng.sgdata.R
 import com.liuyuheng.sgdata.presentation.main.BasePreviewComposable
 import com.liuyuheng.sgdata.presentation.main.theme.Dimensions
 import com.liuyuheng.sgdata.presentation.main.theme.onPrimaryContainerLight
@@ -32,12 +31,14 @@ import com.liuyuheng.sgdata.presentation.shared.SGDataSpacer
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     onNavigateToWeatherForecast: () -> Unit,
+    onNavigateToCarparkAvailability: () -> Unit,
 ) {
     val screensList by viewModel.screensList.collectAsStateWithLifecycle()
 
     HomeScreen(
         screensList = screensList,
         onNavigateToWeatherForecast = onNavigateToWeatherForecast,
+        onNavigateToCarparkAvailability = onNavigateToCarparkAvailability,
     )
 }
 
@@ -45,6 +46,7 @@ fun HomeScreen(
 fun HomeScreen(
     screensList: List<ScreenType>,
     onNavigateToWeatherForecast: () -> Unit,
+    onNavigateToCarparkAvailability: () -> Unit,
 ) {
     Column {
         LazyVerticalGrid(
@@ -59,7 +61,10 @@ fun HomeScreen(
                 ScreenCard(
                     screenType = screenType,
                     onClick = {
-                        onNavigateToWeatherForecast.invoke()
+                        when (screenType) {
+                            ScreenType.WEATHER_FORECAST -> onNavigateToWeatherForecast.invoke()
+                            ScreenType.CARPARK_AVAILABILITY -> onNavigateToCarparkAvailability.invoke()
+                        }
                     }
                 )
             }
@@ -74,16 +79,14 @@ fun ScreenCard(
 ) {
     Card(
         onClick = onClick,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(all = Dimensions.paddingMedium),
+        modifier = Modifier.fillMaxSize(),
         colors = CardDefaults.cardColors(
             containerColor = primaryContainerLight,
             contentColor = onPrimaryContainerLight,
         ),
     ) {
         Icon(
-            painter = painterResource(R.drawable.image_weather),
+            painter = painterResource(screenType.icon),
             contentDescription = null,
             modifier = Modifier
                 .padding(all = Dimensions.paddingMedium),
@@ -103,8 +106,9 @@ fun ScreenCard(
 fun HomeScreenPreview() {
     BasePreviewComposable {
         HomeScreen(
-            screensList = listOf(ScreenType.WEATHER_FORECAST),
+            screensList = ScreenType.entries,
             onNavigateToWeatherForecast = {},
+            onNavigateToCarparkAvailability = {}
         )
     }
 }

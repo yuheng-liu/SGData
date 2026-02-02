@@ -1,5 +1,6 @@
 package com.liuyuheng.sgdata.data.network.di
 
+import com.liuyuheng.sgdata.data.network.DataStoreSearchApi
 import com.liuyuheng.sgdata.data.network.WeatherForecastApi
 import dagger.Module
 import dagger.Provides
@@ -14,6 +15,13 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideWeatherForecastApi(retrofit: Retrofit): WeatherForecastApi =
-        retrofit.create(WeatherForecastApi::class.java)
+    fun provideWeatherForecastApi(
+        @RealTimeEndpoint retrofit: Retrofit
+    ): WeatherForecastApi = retrofit.create(WeatherForecastApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideDataStoreSearchApi(
+        @DataStoreSearchEndpoint retrofit: Retrofit,
+    ): DataStoreSearchApi = retrofit.create(DataStoreSearchApi::class.java)
 }
