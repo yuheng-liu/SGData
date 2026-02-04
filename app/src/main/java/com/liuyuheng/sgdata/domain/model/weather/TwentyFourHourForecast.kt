@@ -1,10 +1,10 @@
-package com.liuyuheng.sgdata.domain.model
+package com.liuyuheng.sgdata.domain.model.weather
 
-import com.liuyuheng.sgdata.domain.model.weather.ForecastDetails
-import com.liuyuheng.sgdata.domain.model.weather.RelativeHumidity
-import com.liuyuheng.sgdata.domain.model.weather.Temperature
-import com.liuyuheng.sgdata.domain.model.weather.TimePeriod
-import com.liuyuheng.sgdata.domain.model.weather.Wind
+import com.liuyuheng.sgdata.domain.model.weather.shared.ForecastDetails
+import com.liuyuheng.sgdata.domain.model.weather.shared.RelativeHumidity
+import com.liuyuheng.sgdata.domain.model.weather.shared.Temperature
+import com.liuyuheng.sgdata.domain.model.weather.shared.TimePeriod
+import com.liuyuheng.sgdata.domain.model.weather.shared.Wind
 import java.time.LocalDate
 import java.time.LocalDateTime
 

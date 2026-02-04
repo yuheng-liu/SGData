@@ -1,6 +1,6 @@
-package com.liuyuheng.sgdata.domain.model
+package com.liuyuheng.sgdata.domain.model.weather
 
-import com.liuyuheng.sgdata.domain.model.weather.TimePeriod
+import com.liuyuheng.sgdata.domain.model.weather.shared.TimePeriod
 import java.time.LocalDateTime
 
 data class TwoHourForecast(

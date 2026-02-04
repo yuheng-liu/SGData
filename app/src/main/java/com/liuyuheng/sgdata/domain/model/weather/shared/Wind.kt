@@ -1,4 +1,4 @@
-package com.liuyuheng.sgdata.domain.model.weather
+package com.liuyuheng.sgdata.domain.model.weather.shared
 
 data class Wind(
     val speed: WindSpeed,

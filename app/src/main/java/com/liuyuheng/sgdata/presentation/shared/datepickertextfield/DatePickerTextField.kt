@@ -24,7 +24,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.liuyuheng.sgdata.R
 import com.liuyuheng.sgdata.presentation.main.BasePreviewComposable
-import com.liuyuheng.sgdata.utils.toFormattedDate
+import com.liuyuheng.sgdata.shared.toFormattedDate
 
 @Composable
 fun DatePickerTextField(

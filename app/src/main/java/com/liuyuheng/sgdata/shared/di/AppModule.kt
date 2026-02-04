@@ -1,4 +1,4 @@
-package com.liuyuheng.sgdata.di
+package com.liuyuheng.sgdata.shared.di
 
 import com.liuyuheng.sgdata.presentation.shared.loader.LoadingStateHandler
 import dagger.Module

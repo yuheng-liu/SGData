@@ -1,4 +1,4 @@
-package com.liuyuheng.sgdata.domain.model.weather
+package com.liuyuheng.sgdata.domain.model.weather.shared
 
 enum class WeatherText(val displayString: String) {
     FAIR("Fair"),

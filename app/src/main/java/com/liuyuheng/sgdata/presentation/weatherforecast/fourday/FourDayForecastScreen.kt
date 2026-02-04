@@ -22,7 +22,7 @@ import com.liuyuheng.sgdata.presentation.shared.datepickertextfield.DatePickerTe
 import com.liuyuheng.sgdata.presentation.shared.dialog.DialogTypes
 import com.liuyuheng.sgdata.presentation.shared.dialog.HttpErrorDialog
 import com.liuyuheng.sgdata.presentation.weatherforecast.WeatherForecastViewModel
-import com.liuyuheng.sgdata.utils.toLocalDateOrNull
+import com.liuyuheng.sgdata.shared.toLocalDateOrNull
 import java.time.LocalDate
 import java.time.LocalTime
 

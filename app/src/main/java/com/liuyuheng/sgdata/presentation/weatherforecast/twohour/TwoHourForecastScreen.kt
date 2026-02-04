@@ -13,8 +13,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.liuyuheng.sgdata.domain.model.TwoHourForecast
-import com.liuyuheng.sgdata.domain.model.weather.TimePeriod
+import com.liuyuheng.sgdata.domain.model.weather.TwoHourForecast
+import com.liuyuheng.sgdata.domain.model.weather.shared.TimePeriod
 import com.liuyuheng.sgdata.presentation.main.BasePreviewComposable
 import com.liuyuheng.sgdata.presentation.main.theme.Dimensions
 import com.liuyuheng.sgdata.presentation.shared.SGDataSpacer

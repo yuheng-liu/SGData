@@ -1,6 +1,6 @@
 package com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour
 
-import com.liuyuheng.sgdata.domain.model.TwentyFourHourForecast
+import com.liuyuheng.sgdata.domain.model.weather.TwentyFourHourForecast
 import com.liuyuheng.sgdata.presentation.shared.getRelativeHumidityString
 import com.liuyuheng.sgdata.presentation.shared.getTemperatureString
 import com.liuyuheng.sgdata.presentation.shared.getWindString

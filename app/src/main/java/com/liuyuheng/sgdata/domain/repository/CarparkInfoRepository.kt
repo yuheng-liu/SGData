@@ -2,5 +2,5 @@ package com.liuyuheng.sgdata.domain.repository
 
 interface CarparkInfoRepository {
 
-    suspend fun getCarparkInfoDataset()
+    suspend fun updateCarparkInfoDataset()
 }

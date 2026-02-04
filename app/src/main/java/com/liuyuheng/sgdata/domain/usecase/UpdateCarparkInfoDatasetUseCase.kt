@@ -3,8 +3,8 @@ package com.liuyuheng.sgdata.domain.usecase
 import com.liuyuheng.sgdata.domain.repository.CarparkInfoRepository
 import javax.inject.Inject
 
-class GetCarparkInfoDatasetUseCase @Inject constructor(
+class UpdateCarparkInfoDatasetUseCase @Inject constructor(
     private val carparkInfoRepository: CarparkInfoRepository,
 ) {
-    suspend fun invoke() = carparkInfoRepository.getCarparkInfoDataset()
+    suspend fun invoke() = carparkInfoRepository.updateCarparkInfoDataset()
 }

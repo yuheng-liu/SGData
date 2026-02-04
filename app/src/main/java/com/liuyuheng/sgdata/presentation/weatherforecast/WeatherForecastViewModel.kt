@@ -15,7 +15,7 @@ import com.liuyuheng.sgdata.presentation.weatherforecast.fourday.toUi
 import com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour.TwentyFourHourForecastUiState
 import com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour.toUi
 import com.liuyuheng.sgdata.presentation.weatherforecast.twohour.TwoHourForecastUiState
-import com.liuyuheng.sgdata.utils.toLocalDateOrNull
+import com.liuyuheng.sgdata.shared.toLocalDateOrNull
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

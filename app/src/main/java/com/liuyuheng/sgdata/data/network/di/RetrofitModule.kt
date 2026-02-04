@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 private const val DATA_GOV_REAL_TIME_DATA_URL = "https://api-open.data.gov.sg/v2/real-time/api/"
-private const val DATA_GOV_DATA_STORE_SEARCH_URL = "https://data.gov.sg/api/action/datastore_search/"
+private const val DATA_GOV_DATASETS_URL = "https://api-open.data.gov.sg/v1/public/api/datasets/"
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -50,12 +50,12 @@ object RetrofitModule {
 
     @Singleton
     @Provides
-    @DataStoreSearchEndpoint
-    fun provideDataStoreSearchRetrofit(
+    @DatasetEndpoint
+    fun provideDatasetRetrofit(
         client: OkHttpClient,
         moshi: Moshi,
     ): Retrofit = Retrofit.Builder()
-        .baseUrl(DATA_GOV_DATA_STORE_SEARCH_URL)
+        .baseUrl(DATA_GOV_DATASETS_URL)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .client(client)
         .build()

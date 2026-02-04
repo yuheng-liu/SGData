@@ -1,9 +1,9 @@
 package com.liuyuheng.sgdata.data.model.mappers
 
 import com.liuyuheng.sgdata.data.model.TwoHourForecastDto
-import com.liuyuheng.sgdata.domain.model.TwoHourForecast
-import com.liuyuheng.sgdata.domain.model.weather.TimePeriod
-import com.liuyuheng.sgdata.utils.toLocalDateTimeOrNull
+import com.liuyuheng.sgdata.domain.model.weather.TwoHourForecast
+import com.liuyuheng.sgdata.domain.model.weather.shared.TimePeriod
+import com.liuyuheng.sgdata.shared.toLocalDateTimeOrNull
 
 fun TwoHourForecastDto.toDomain(): TwoHourForecast {
     val latestItem = items.maxBy { it.updatedTimestamp }

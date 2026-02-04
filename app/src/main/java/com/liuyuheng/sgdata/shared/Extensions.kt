@@ -1,4 +1,4 @@
-package com.liuyuheng.sgdata.utils
+package com.liuyuheng.sgdata.shared
 
 import java.time.Instant
 import java.time.LocalDate

@@ -1,15 +1,15 @@
 package com.liuyuheng.sgdata.data.model.mappers
 
 import com.liuyuheng.sgdata.data.model.TwentyFourHourForecastDto
-import com.liuyuheng.sgdata.domain.model.TwentyFourHourForecast
-import com.liuyuheng.sgdata.domain.model.weather.ForecastDetails
-import com.liuyuheng.sgdata.domain.model.weather.RelativeHumidity
-import com.liuyuheng.sgdata.domain.model.weather.Temperature
-import com.liuyuheng.sgdata.domain.model.weather.TimePeriod
-import com.liuyuheng.sgdata.domain.model.weather.WeatherText
-import com.liuyuheng.sgdata.domain.model.weather.Wind
-import com.liuyuheng.sgdata.utils.toLocalDateOrNull
-import com.liuyuheng.sgdata.utils.toLocalDateTimeOrNull
+import com.liuyuheng.sgdata.domain.model.weather.TwentyFourHourForecast
+import com.liuyuheng.sgdata.domain.model.weather.shared.ForecastDetails
+import com.liuyuheng.sgdata.domain.model.weather.shared.RelativeHumidity
+import com.liuyuheng.sgdata.domain.model.weather.shared.Temperature
+import com.liuyuheng.sgdata.domain.model.weather.shared.TimePeriod
+import com.liuyuheng.sgdata.domain.model.weather.shared.WeatherText
+import com.liuyuheng.sgdata.domain.model.weather.shared.Wind
+import com.liuyuheng.sgdata.shared.toLocalDateOrNull
+import com.liuyuheng.sgdata.shared.toLocalDateTimeOrNull
 
 fun TwentyFourHourForecastDto.toDomain(): TwentyFourHourForecast {
     val latestRecord = records.maxBy { it.updatedTimestamp }

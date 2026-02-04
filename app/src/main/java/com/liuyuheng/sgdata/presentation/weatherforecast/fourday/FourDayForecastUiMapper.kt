@@ -1,6 +1,6 @@
 package com.liuyuheng.sgdata.presentation.weatherforecast.fourday
 
-import com.liuyuheng.sgdata.domain.model.FourDayForecast
+import com.liuyuheng.sgdata.domain.model.weather.FourDayForecast
 import com.liuyuheng.sgdata.presentation.shared.getDetailsString
 import com.liuyuheng.sgdata.presentation.shared.getRelativeHumidityString
 import com.liuyuheng.sgdata.presentation.shared.getTemperatureString

@@ -3,29 +3,25 @@ package com.liuyuheng.sgdata.data.network
 import com.liuyuheng.sgdata.data.model.FourDayForecastDto
 import com.liuyuheng.sgdata.data.model.TwentyFourHourForecastDto
 import com.liuyuheng.sgdata.data.model.TwoHourForecastDto
-import com.liuyuheng.sgdata.data.network.response.WeatherResponse
+import com.liuyuheng.sgdata.data.network.response.BaseResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
-
-private const val FOUR_DAY_OUTLOOK = "four-day-outlook"
-private const val TWENTY_FOUR_HOUR_FORECAST = "twenty-four-hr-forecast"
-private const val TWO_HOUR_FORECAST = "two-hr-forecast"
 
 private const val QUERY_DATE = "date"
 
 interface WeatherForecastApi {
-    @GET(FOUR_DAY_OUTLOOK)
+    @GET("four-day-outlook")
     suspend fun getFourDayForecast(
         @Query(value = QUERY_DATE) date: String? = null,
-    ): WeatherResponse<FourDayForecastDto>
+    ): BaseResponse<FourDayForecastDto>
 
-    @GET(TWENTY_FOUR_HOUR_FORECAST)
+    @GET("twenty-four-hr-forecast")
     suspend fun getTwentyFourHourForecast(
         @Query(value = QUERY_DATE) date: String? = null,
-    ): WeatherResponse<TwentyFourHourForecastDto>
+    ): BaseResponse<TwentyFourHourForecastDto>
 
-    @GET(TWO_HOUR_FORECAST)
+    @GET("two-hr-forecast")
     suspend fun getTwoHourForecast(
         @Query(value = QUERY_DATE) date: String? = null,
-    ): WeatherResponse<TwoHourForecastDto>
+    ): BaseResponse<TwoHourForecastDto>
 }

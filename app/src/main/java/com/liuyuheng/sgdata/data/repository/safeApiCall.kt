@@ -3,7 +3,7 @@ package com.liuyuheng.sgdata.data.repository
 import android.util.Log
 import com.liuyuheng.sgdata.data.network.response.ErrorResponse
 import com.liuyuheng.sgdata.domain.ApiResult
-import com.liuyuheng.sgdata.utils.Constants
+import com.liuyuheng.sgdata.shared.Constants
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

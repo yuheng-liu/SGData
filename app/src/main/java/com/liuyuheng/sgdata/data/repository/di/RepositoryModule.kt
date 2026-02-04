@@ -1,4 +1,4 @@
-package com.liuyuheng.sgdata.di
+package com.liuyuheng.sgdata.data.repository.di
 
 import com.liuyuheng.sgdata.data.repository.CarparkInfoRepositoryImpl
 import com.liuyuheng.sgdata.data.repository.WeatherForecastRepositoryImpl
