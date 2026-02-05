@@ -2,13 +2,17 @@ package com.liuyuheng.sgdata.data.repository
 
 import com.liuyuheng.sgdata.data.database.CarparkInfoDao
 import com.liuyuheng.sgdata.data.database.CarparkInfoEntity
+import com.liuyuheng.sgdata.data.model.mappers.toDomain
 import com.liuyuheng.sgdata.data.network.DatasetDownloadApi
 import com.liuyuheng.sgdata.data.toBooleanOrNull
+import com.liuyuheng.sgdata.domain.model.carpark.CarparkInfo
 import com.liuyuheng.sgdata.domain.model.carpark.CarparkType
 import com.liuyuheng.sgdata.domain.model.carpark.ParkingSystemType
 import com.liuyuheng.sgdata.domain.repository.CarparkInfoRepository
 import com.opencsv.CSVReader
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -23,7 +27,7 @@ class CarparkInfoRepositoryImpl @Inject constructor(
         withContext(Dispatchers.IO) {
             val downloadResponse = datasetDownloadApi.initiateCarparkInfoDownload()
             downloadResponse.data?.let { downloadData ->
-                // returned url gives a CSV file containing all carpark info
+                // returned url points to a CSV file containing all carpark info
                 val response = datasetDownloadApi.downloadFromUrl(downloadData.url)
                 if (response.isSuccessful) {
                     response.body()?.byteStream()?.use { stream ->
@@ -33,6 +37,9 @@ class CarparkInfoRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override fun getCarparkInfoDataset(): Flow<List<CarparkInfo>> =
+        carparkInfoDao.getCarparkInfoStream().map { entities -> entities.map { it.toDomain() } }
 
     private fun parseCsv(inputStream: InputStream): List<CarparkInfoEntity> {
         val reader = CSVReader(InputStreamReader(inputStream))

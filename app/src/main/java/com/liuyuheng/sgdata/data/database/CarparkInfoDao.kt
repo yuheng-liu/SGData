@@ -13,7 +13,7 @@ interface CarparkInfoDao {
     suspend fun insertAll(items: List<CarparkInfoEntity>)
 
     @Query("SELECT * FROM carpark_info")
-    fun getCarparkInfo(): Flow<List<CarparkInfoEntity>>
+    fun getCarparkInfoStream(): Flow<List<CarparkInfoEntity>>
 
     @Query("DELETE FROM carpark_info")
     suspend fun clearCarparkInfo()

@@ -12,26 +12,27 @@ import com.liuyuheng.sgdata.presentation.main.BasePreviewComposable
 
 @Composable
 fun CarparkAvailabilityScreen(
-    viewModel: CarparkAvailabilityViewModel
+    viewModel: CarparkAvailabilityViewModel,
+    onNavigateToCarparkInfo: () -> Unit
 ) {
 
     CarparkAvailabilityScreen(
-        onClickButton = viewModel::getCarparkInfoDataset
+        onNavigateToCarparkInfo = onNavigateToCarparkInfo
     )
 }
 
 @Composable
 private fun CarparkAvailabilityScreen(
-    onClickButton: () -> Unit,
+    onNavigateToCarparkInfo: () -> Unit,
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
         Button(
-            onClick = { onClickButton() }
+            onClick = { onNavigateToCarparkInfo() }
         ) {
-            Text("Get Carpark Data")
+            Text("Go to Carpark Info")
         }
     }
 }
@@ -41,7 +42,7 @@ private fun CarparkAvailabilityScreen(
 private fun CarparkAvailabilityScreenPreview() {
     BasePreviewComposable {
         CarparkAvailabilityScreen(
-            onClickButton = {},
+            onNavigateToCarparkInfo = {},
         )
     }
 }

@@ -9,16 +9,26 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.liuyuheng.sgdata.presentation.carparkavailability.carparkinfo.CarparkInfoScreen
 import com.liuyuheng.sgdata.presentation.main.navigation.AppRoute
 
 fun NavGraphBuilder.carparkAvailabilityGraph(navController: NavHostController) {
     navigation(
-        startDestination = CarparkAvailabilityRoute.CarparkInfo.route,
+        startDestination = CarparkAvailabilityRoute.CarparkAvailability.route,
         route = AppRoute.CarparkAvailability.route,
     ) {
-        // Carpark Info screen
+        // Carpark Availability screen
+        composable(CarparkAvailabilityRoute.CarparkAvailability.route) {
+            CarparkAvailabilityScreen(
+                viewModel = carparkAvailabilityViewModel(navController),
+                onNavigateToCarparkInfo = {
+                    navController.navigate(CarparkAvailabilityRoute.CarparkInfo.route)
+                }
+            )
+        }
+        // Carpark Info Screen
         composable(CarparkAvailabilityRoute.CarparkInfo.route) {
-            CarparkAvailabilityScreen(carparkAvailabilityViewModel(navController))
+            CarparkInfoScreen(carparkAvailabilityViewModel(navController))
         }
     }
 }
