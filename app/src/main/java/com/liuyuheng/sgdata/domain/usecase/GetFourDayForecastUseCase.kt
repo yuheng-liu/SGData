@@ -8,5 +8,5 @@ class GetFourDayForecastUseCase @Inject constructor(
     private val weatherForecastRepository: WeatherForecastRepository,
 ) {
 
-    suspend fun invoke(date: LocalDate?) = weatherForecastRepository.getFourDayForecast(date)
+    suspend operator fun invoke(date: LocalDate?) = weatherForecastRepository.getFourDayForecast(date)
 }

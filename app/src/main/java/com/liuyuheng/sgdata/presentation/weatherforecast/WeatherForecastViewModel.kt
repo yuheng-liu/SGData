@@ -84,7 +84,7 @@ class WeatherForecastViewModel @Inject constructor(
 
     fun fetchFourDayForecast() = viewModelScope.launch {
         loadingStateHandler.withLoading {
-            when (val fourDayForecast = getFourDayForecastUseCase.invoke(_fourDayForecastUiState.value.selectedDate)) {
+            when (val fourDayForecast = getFourDayForecastUseCase(_fourDayForecastUiState.value.selectedDate)) {
                 is ApiResult.Success -> {
                     _fourDayForecastUiState.update {
                         it.copy(
@@ -102,7 +102,7 @@ class WeatherForecastViewModel @Inject constructor(
 
     fun fetchTwentyFourHoursForecast() = viewModelScope.launch {
         loadingStateHandler.withLoading {
-            when (val twentyFourHourForecast = getTwentyFourHourForecastUseCase.invoke(_twentyFourHourForecastUiState.value.selectedDate)) {
+            when (val twentyFourHourForecast = getTwentyFourHourForecastUseCase(_twentyFourHourForecastUiState.value.selectedDate)) {
                 is ApiResult.Success -> {
                     _twentyFourHourForecastUiState.update {
                         it.copy(
@@ -130,7 +130,7 @@ class WeatherForecastViewModel @Inject constructor(
         val selectedDateTime = _twentyFourHourForecastUiState.value.selectedDate?.atTime(twoHoursForecastUiState.value.selectedTimeslot)
 
         loadingStateHandler.withLoading {
-            when (val twoHourForecast = getTwoHourForecastUseCase.invoke(selectedDateTime)) {
+            when (val twoHourForecast = getTwoHourForecastUseCase(selectedDateTime)) {
                 is ApiResult.Success -> {
                     _twoHoursForecastUiState.update {
                         it.copy(

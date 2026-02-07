@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetTwentyFourHourForecastUseCase @Inject constructor(
     private val weatherForecastRepository: WeatherForecastRepository,
 ) {
-    suspend fun invoke(date: LocalDate?) = weatherForecastRepository.getTwentyFourHourForecast(date)
+    suspend operator fun invoke(date: LocalDate?) = weatherForecastRepository.getTwentyFourHourForecast(date)
 }

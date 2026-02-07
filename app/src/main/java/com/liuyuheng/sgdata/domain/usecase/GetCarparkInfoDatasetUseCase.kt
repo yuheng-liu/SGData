@@ -6,5 +6,5 @@ import javax.inject.Inject
 class GetCarparkInfoDatasetUseCase @Inject constructor(
     private val carparkInfoRepository: CarparkInfoRepository
 ) {
-    fun invoke() = carparkInfoRepository.getCarparkInfoDataset()
+    operator fun invoke() = carparkInfoRepository.getCarparkInfoDataset()
 }

@@ -39,3 +39,17 @@ fun String.toLocalDateTimeOrNull(): LocalDateTime? {
         null
     }
 }
+
+fun Boolean.toYesNo(): String = if (this) "Yes" else "No"
+
+fun String.toCapitalize(allWords: Boolean = false): String {
+    return lowercase().run {
+        if (allWords) {
+            split(" ").joinToString(" ") { word ->
+                word.replaceFirstChar { it.titlecase() }
+            }
+        } else {
+            this.replaceFirstChar { it.titlecase() }
+        }
+    }
+}

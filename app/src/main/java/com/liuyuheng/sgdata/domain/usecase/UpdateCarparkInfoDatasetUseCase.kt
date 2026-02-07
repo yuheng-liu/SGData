@@ -6,5 +6,5 @@ import javax.inject.Inject
 class UpdateCarparkInfoDatasetUseCase @Inject constructor(
     private val carparkInfoRepository: CarparkInfoRepository,
 ) {
-    suspend fun invoke() = carparkInfoRepository.updateCarparkInfoDataset()
+    suspend operator fun invoke() = carparkInfoRepository.updateCarparkInfoDataset()
 }
