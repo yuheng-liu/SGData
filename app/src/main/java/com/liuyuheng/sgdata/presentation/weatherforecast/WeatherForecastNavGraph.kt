@@ -17,7 +17,7 @@ import com.liuyuheng.sgdata.presentation.weatherforecast.twohour.TwoHourForecast
 fun NavGraphBuilder.weatherForecastGraph(navController: NavHostController) {
     navigation(
         startDestination = WeatherForecastRoute.FourDayForecast.route,
-        route = AppRoute.WeatherForecast.route,
+        route = AppRoute.WeatherForecastGraph.route,
     ) {
         // Four Day Forecast screen, initial screen
         composable(WeatherForecastRoute.FourDayForecast.route) {
@@ -45,7 +45,7 @@ private fun weatherForecastViewModel(
     navController: NavController
 ): WeatherForecastViewModel {
     val weatherForecastEntry = remember(navController) {
-        navController.getBackStackEntry(AppRoute.WeatherForecast.route)
+        navController.getBackStackEntry(AppRoute.WeatherForecastGraph.route)
     }
     return hiltViewModel(weatherForecastEntry)
 }

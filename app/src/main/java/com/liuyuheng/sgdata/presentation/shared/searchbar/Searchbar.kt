@@ -1,7 +1,6 @@
 package com.liuyuheng.sgdata.presentation.shared.searchbar
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -19,15 +18,14 @@ import com.liuyuheng.sgdata.presentation.main.theme.Dimensions
 @Composable
 fun Searchbar(
     query: String = "",
-    onQueryChange: (String) -> Unit = {},
+    hintText: String = "Search",
+    onQueryChanged: (String) -> Unit = {},
 ) {
     TextField(
         value = query,
-        onValueChange = onQueryChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(Dimensions.paddingMedium),
-        placeholder = { Text("Search carpark name or code") },
+        onValueChange = onQueryChanged,
+        modifier = Modifier.fillMaxWidth(),
+        placeholder = { Text(hintText) },
         singleLine = true,
         shape = RoundedCornerShape(Dimensions.cornerRadiusMedium),
         leadingIcon = {
@@ -35,7 +33,7 @@ fun Searchbar(
         },
         trailingIcon = {
             if (query.isNotEmpty()) {
-                IconButton(onClick = { onQueryChange("") }) {
+                IconButton(onClick = { onQueryChanged("") }) {
                     Icon(imageVector = Icons.Default.Close, null)
                 }
             }

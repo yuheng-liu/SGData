@@ -8,4 +8,6 @@ interface CarparkInfoRepository {
     suspend fun updateCarparkInfoDataset()
 
     fun getCarparkInfoDataset(): Flow<List<CarparkInfo>>
+
+    suspend fun ensureDatabaseUpToDate()
 }

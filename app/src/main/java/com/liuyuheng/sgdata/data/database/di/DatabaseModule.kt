@@ -28,4 +28,9 @@ object DatabaseModule {
     fun provideCarparkInfoDao(
         database: SGDataDatabase
     ) = database.carparkInfoDao()
+
+    @Provides
+    fun provideMetadataDao(
+        database: SGDataDatabase
+    ) = database.metadataDao()
 }

@@ -88,12 +88,13 @@ fun ScreenCard(
         Icon(
             painter = painterResource(screenType.icon),
             contentDescription = null,
-            modifier = Modifier
-                .padding(all = Dimensions.paddingMedium),
+            modifier = Modifier.padding(all = Dimensions.paddingMedium),
             tint = Color.Unspecified,
         )
         Text(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = Dimensions.paddingMedium),
             text = screenType.displayName,
             textAlign = TextAlign.Center,
         )

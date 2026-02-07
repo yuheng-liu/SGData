@@ -53,3 +53,21 @@ fun String.toCapitalize(allWords: Boolean = false): String {
         }
     }
 }
+
+fun LocalDateTime.toDisplayDate(): String {
+    val formatter = DateTimeFormatter.ofPattern("MMM yyyy")
+    return "$dayOfMonth${dayOfMonth.ordinalSuffix()} ${format(formatter)}"
+}
+
+fun Int.ordinalSuffix(): String {
+    return if (this in 11..13) {
+        "th"
+    } else {
+        when (this % 10) {
+            1 -> "st"
+            2 -> "nd"
+            3 -> "rd"
+            else -> "th"
+        }
+    }
+}

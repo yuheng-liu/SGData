@@ -1,4 +1,4 @@
-package com.liuyuheng.sgdata.data.database
+package com.liuyuheng.sgdata.data.database.carparkinfo
 
 import androidx.room.Dao
 import androidx.room.Insert

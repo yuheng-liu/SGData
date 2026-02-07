@@ -1,7 +1,11 @@
 package com.liuyuheng.sgdata.data.repository
 
-import com.liuyuheng.sgdata.data.database.CarparkInfoDao
-import com.liuyuheng.sgdata.data.database.CarparkInfoEntity
+import androidx.room.withTransaction
+import com.liuyuheng.sgdata.data.database.MetadataDao
+import com.liuyuheng.sgdata.data.database.MetadataEntity
+import com.liuyuheng.sgdata.data.database.SGDataDatabase
+import com.liuyuheng.sgdata.data.database.carparkinfo.CarparkInfoDao
+import com.liuyuheng.sgdata.data.database.carparkinfo.CarparkInfoEntity
 import com.liuyuheng.sgdata.data.model.mappers.toDomain
 import com.liuyuheng.sgdata.data.network.DatasetDownloadApi
 import com.liuyuheng.sgdata.data.toBooleanOrNull
@@ -16,11 +20,14 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 class CarparkInfoRepositoryImpl @Inject constructor(
     private val datasetDownloadApi: DatasetDownloadApi,
-    private val carparkInfoDao: CarparkInfoDao
+    private val sgDataDatabase: SGDataDatabase,
+    private val carparkInfoDao: CarparkInfoDao,
+    private val metadataDao: MetadataDao
 ) : CarparkInfoRepository {
 
     override suspend fun updateCarparkInfoDataset() {
@@ -31,7 +38,16 @@ class CarparkInfoRepositoryImpl @Inject constructor(
                 val response = datasetDownloadApi.downloadFromUrl(downloadData.url)
                 if (response.isSuccessful) {
                     response.body()?.byteStream()?.use { stream ->
-                        carparkInfoDao.insertAll(parseCsv(stream))
+                        sgDataDatabase.withTransaction {
+                            metadataDao.insert(
+                                MetadataEntity(
+                                    key = CARPARK_INFO_LAST_UPDATED,
+                                    value = LocalDateTime.now().toString()
+                                )
+                            )
+                            carparkInfoDao.clearCarparkInfo()
+                            carparkInfoDao.insertAll(parseCsv(stream))
+                        }
                     }
                 }
             }
@@ -40,6 +56,14 @@ class CarparkInfoRepositoryImpl @Inject constructor(
 
     override fun getCarparkInfoDataset(): Flow<List<CarparkInfo>> =
         carparkInfoDao.getCarparkInfoStream().map { entities -> entities.map { it.toDomain() } }
+
+    override suspend fun ensureDatabaseUpToDate() {
+        withContext(Dispatchers.IO) {
+            if (metadataDao.getValue(CARPARK_INFO_LAST_UPDATED) == null) {
+                updateCarparkInfoDataset()
+            }
+        }
+    }
 
     private fun parseCsv(inputStream: InputStream): List<CarparkInfoEntity> {
         val reader = CSVReader(InputStreamReader(inputStream))
@@ -61,5 +85,9 @@ class CarparkInfoRepositoryImpl @Inject constructor(
                 carparkBasement = rows[11].toBooleanOrNull() ?: false
             )
         }
+    }
+
+    companion object {
+        const val CARPARK_INFO_LAST_UPDATED = "CARPARK_INFO_LAST_UPDATED"
     }
 }

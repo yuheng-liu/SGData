@@ -23,10 +23,10 @@ fun AppNavHost(
         composable(AppRoute.Home.route) {
             HomeScreen(
                 onNavigateToWeatherForecast = {
-                    navHostController.navigate(AppRoute.WeatherForecast.route)
+                    navHostController.navigate(AppRoute.WeatherForecastGraph.route)
                 },
                 onNavigateToCarparkAvailability = {
-                    navHostController.navigate(AppRoute.CarparkAvailability.route)
+                    navHostController.navigate(AppRoute.CarparkAvailabilityGraph.route)
                 }
             )
         }

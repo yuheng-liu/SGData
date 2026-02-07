@@ -7,6 +7,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
+import com.liuyuheng.sgdata.presentation.carparkavailability.CarparkAvailabilityRoute
 import com.liuyuheng.sgdata.presentation.main.navigation.AppRoute
 import com.liuyuheng.sgdata.presentation.weatherforecast.WeatherForecastRoute
 
@@ -49,6 +50,16 @@ fun getTopBarState(
     WeatherForecastRoute.TwoHourForecast.route -> TopBarState.Shown(
         title = "2hrs Forecast",
         onBackClicked = { navController.popBackStack() },
+    )
+
+    CarparkAvailabilityRoute.CarparkAvailability.route -> TopBarState.Shown(
+        title = "Carpark Availability",
+        onBackClicked = { navController.popBackStack() }
+    )
+
+    CarparkAvailabilityRoute.CarparkInfo.route -> TopBarState.Shown(
+        title = "Carpark Info",
+        onBackClicked = { navController.popBackStack() }
     )
 
     else -> TopBarState.Hidden

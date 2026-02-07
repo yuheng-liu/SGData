@@ -15,7 +15,7 @@ import com.liuyuheng.sgdata.presentation.main.navigation.AppRoute
 fun NavGraphBuilder.carparkAvailabilityGraph(navController: NavHostController) {
     navigation(
         startDestination = CarparkAvailabilityRoute.CarparkAvailability.route,
-        route = AppRoute.CarparkAvailability.route,
+        route = AppRoute.CarparkAvailabilityGraph.route,
     ) {
         // Carpark Availability screen
         composable(CarparkAvailabilityRoute.CarparkAvailability.route) {
@@ -39,7 +39,7 @@ private fun carparkAvailabilityViewModel(
     navController: NavController
 ): CarparkAvailabilityViewModel {
     val carparkAvailabilityEntry = remember(navController) {
-        navController.getBackStackEntry(AppRoute.CarparkAvailability.route)
+        navController.getBackStackEntry(AppRoute.CarparkAvailabilityGraph.route)
     }
     return hiltViewModel(carparkAvailabilityEntry)
 }

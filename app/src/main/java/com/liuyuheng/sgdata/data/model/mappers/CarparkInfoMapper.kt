@@ -1,6 +1,6 @@
 package com.liuyuheng.sgdata.data.model.mappers
 
-import com.liuyuheng.sgdata.data.database.CarparkInfoEntity
+import com.liuyuheng.sgdata.data.database.carparkinfo.CarparkInfoEntity
 import com.liuyuheng.sgdata.domain.model.carpark.CarparkInfo
 import com.liuyuheng.sgdata.domain.model.carpark.CarparkInfo.Coordinates
 
