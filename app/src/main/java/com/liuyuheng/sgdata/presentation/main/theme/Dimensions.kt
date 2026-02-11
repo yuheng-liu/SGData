@@ -10,4 +10,14 @@ object Dimensions {
     val cornerRadiusSmall = 4.dp
     val cornerRadiusMedium = 8.dp
     val cornerRadiusLarge = 16.dp
+
+    val iconSizeMedium = 24.dp
+    val iconSizeLarge = 32.dp
+    val iconSizeExtraLarge = 48.dp
+
+    val imageSizeSmall = 100.dp
+    val imageSizeMedium = 150.dp
+    val imageSizeLarge = 200.dp
+
+    val cardRowHeight = 120.dp
 }

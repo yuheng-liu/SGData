@@ -1,7 +1,6 @@
 package com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,15 +11,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.liuyuheng.sgdata.domain.model.weather.shared.Temperature
+import com.liuyuheng.sgdata.domain.model.weather.shared.WeatherText
 import com.liuyuheng.sgdata.presentation.main.BasePreviewComposable
 import com.liuyuheng.sgdata.presentation.main.theme.Dimensions
 import com.liuyuheng.sgdata.presentation.shared.SGDataSpacer
 import com.liuyuheng.sgdata.presentation.shared.dialog.DialogTypes
 import com.liuyuheng.sgdata.presentation.shared.dialog.HttpErrorDialog
+import com.liuyuheng.sgdata.presentation.shared.error.ErrorBox
 import com.liuyuheng.sgdata.presentation.weatherforecast.WeatherForecastViewModel
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -42,7 +43,7 @@ fun TwentyFourHoursForecastScreen(
     }
 
     if (uiState.twentyFourHourForecast.dateTime == null) {
-        ErrorScreen()
+        ErrorBox("No data available")
     } else {
         TwentyFourHoursForecastScreen(
             uiState = uiState
@@ -108,16 +109,6 @@ fun TwentyFourHoursForecastScreen(
     }
 }
 
-@Composable
-private fun ErrorScreen() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text("No data available")
-    }
-}
-
 @Preview
 @Composable
 private fun WeatherForecastScreenPreview() {
@@ -127,7 +118,7 @@ private fun WeatherForecastScreenPreview() {
                 selectedDate = LocalDate.now(),
                 twentyFourHourForecast = TwentyFourHourForecastUi(
                     dateTime = LocalDateTime.now(),
-                    temperature = "25°C/32°C",
+                    temperature = Temperature(24, 33, "°C"),
                     relativeHumidity = "60% - 95%",
                     wind = "Light; 10-15 km/h",
                     details = "Partly cloudy",
@@ -136,21 +127,21 @@ private fun WeatherForecastScreenPreview() {
                         TwentyFourHourForecastUi.PeriodRegionForecastUi(
                             timePeriod = "12:00 PM - 06:00 PM",
                             regions = TwentyFourHourForecastUi.PeriodRegionForecastUi.RegionsUi(
-                                west = "Thundery Showers",
-                                east = "Partly Cloudy",
-                                central = "Showers",
-                                south = "Partly Cloudy",
-                                north = "Partly Cloudy"
+                                west = WeatherText.PARTLY_CLOUDY,
+                                east = WeatherText.PARTLY_CLOUDY,
+                                central = WeatherText.PARTLY_CLOUDY,
+                                south = WeatherText.PARTLY_CLOUDY,
+                                north = WeatherText.PARTLY_CLOUDY
                             )
                         ),
                         TwentyFourHourForecastUi.PeriodRegionForecastUi(
                             timePeriod = "06:00 PM - 12:00 AM",
                             regions = TwentyFourHourForecastUi.PeriodRegionForecastUi.RegionsUi(
-                                west = "Partly Cloudy",
-                                east = "Partly Cloudy",
-                                central = "Partly Cloudy",
-                                south = "Partly Cloudy",
-                                north = "Partly Cloudy"
+                                west = WeatherText.PARTLY_CLOUDY,
+                                east = WeatherText.PARTLY_CLOUDY,
+                                central = WeatherText.PARTLY_CLOUDY,
+                                south = WeatherText.PARTLY_CLOUDY,
+                                north = WeatherText.PARTLY_CLOUDY
                             )
                         )
                     )

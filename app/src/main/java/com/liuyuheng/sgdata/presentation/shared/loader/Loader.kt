@@ -12,7 +12,7 @@ import com.liuyuheng.sgdata.presentation.main.BasePreviewComposable
 import com.liuyuheng.sgdata.presentation.main.theme.onBackgroundLight
 
 @Composable
-fun GlobalLoader() {
+fun Loader() {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -25,8 +25,8 @@ fun GlobalLoader() {
 
 @Preview
 @Composable
-fun GlobalLoader_Preview() {
+fun Loader_Preview() {
     BasePreviewComposable {
-        GlobalLoader()
+        Loader()
     }
 }

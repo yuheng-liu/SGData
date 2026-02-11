@@ -6,6 +6,7 @@ import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 fun Long.toFormattedDate(
     pattern: String = "dd/MM/yyyy",
@@ -55,8 +56,14 @@ fun String.toCapitalize(allWords: Boolean = false): String {
 }
 
 fun LocalDateTime.toDisplayDate(): String {
-    val formatter = DateTimeFormatter.ofPattern("MMM yyyy")
+    val formatter = DateTimeFormatter.ofPattern("MMM yyyy", Locale.ENGLISH)
     return "$dayOfMonth${dayOfMonth.ordinalSuffix()} ${format(formatter)}"
+}
+
+fun LocalDateTime.toDisplayDateV2(): String {
+    val formatter = DateTimeFormatter.ofPattern("EEE MMM", Locale.ENGLISH)
+    val parts = format(formatter).split(" ")
+    return "${parts[0]} $dayOfMonth${dayOfMonth.ordinalSuffix()} ${parts[1]}"
 }
 
 fun Int.ordinalSuffix(): String {

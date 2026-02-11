@@ -16,7 +16,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.liuyuheng.sgdata.presentation.main.navigation.AppNavHost
 import com.liuyuheng.sgdata.presentation.main.theme.SGDataTheme
-import com.liuyuheng.sgdata.presentation.shared.loader.GlobalLoader
+import com.liuyuheng.sgdata.presentation.shared.loader.Loader
 import com.liuyuheng.sgdata.presentation.shared.loader.LoadingStateHandler
 import com.liuyuheng.sgdata.presentation.shared.topbar.SGDataTopBar
 import com.liuyuheng.sgdata.presentation.shared.topbar.TopBarState
@@ -57,7 +57,7 @@ fun MainScreen(
             )
 
             if (isLoading) {
-                GlobalLoader()
+                Loader()
             }
         }
     }

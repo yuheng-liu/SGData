@@ -1,4 +1,4 @@
-package com.liuyuheng.sgdata.presentation.shared
+package com.liuyuheng.sgdata.presentation.weatherforecast
 
 import com.liuyuheng.sgdata.domain.model.weather.FourDayForecast
 import com.liuyuheng.sgdata.domain.model.weather.shared.RelativeHumidity
@@ -21,7 +21,7 @@ fun getRelativeHumidityString(relativeHumidity: RelativeHumidity?): String {
 
 fun getWindString(wind: Wind?): String {
     return wind?.let { wind ->
-        "${wind.speed.low} - ${wind.speed.high}; ${wind.direction}"
+        "${wind.direction} ${wind.speed.low} - ${wind.speed.high}"
     } ?: ""
 }
 
@@ -29,4 +29,12 @@ fun getDetailsString(details: FourDayForecast.Forecast.ForecastDetails?): String
     return details?.let { details ->
         "(${details.code}) ${details.text.displayString}, ${details.summary}"
     } ?: ""
+}
+
+fun temperatureUnitToSymbol(unit: String?): String {
+    return when (unit) {
+        "Degrees Celsius" -> "°C"
+        "Degrees Fahrenheit" -> "°F"
+        else -> ""
+    }
 }

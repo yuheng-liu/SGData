@@ -1,6 +1,7 @@
 package com.liuyuheng.sgdata.data.repository
 
 import com.liuyuheng.sgdata.data.database.MetadataDao
+import com.liuyuheng.sgdata.data.database.MetadataEntity
 import com.liuyuheng.sgdata.data.repository.CarparkInfoRepositoryImpl.Companion.CARPARK_INFO_LAST_UPDATED
 import com.liuyuheng.sgdata.domain.repository.MetadataRepository
 import java.time.LocalDateTime
@@ -14,5 +15,9 @@ class MetadataRepositoryImpl @Inject constructor(
         return metadataDao.getValue(CARPARK_INFO_LAST_UPDATED)?.let {
             LocalDateTime.parse(it)
         }
+    }
+
+    override suspend fun addMetaData(key: String, value: String) {
+        metadataDao.insert(MetadataEntity(key = key, value = value))
     }
 }
