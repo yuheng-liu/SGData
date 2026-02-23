@@ -2,9 +2,9 @@ package com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour
 
 import com.liuyuheng.sgdata.domain.model.weather.TwentyFourHourForecast
 import com.liuyuheng.sgdata.domain.model.weather.shared.Temperature
-import com.liuyuheng.sgdata.presentation.weatherforecast.getRelativeHumidityString
-import com.liuyuheng.sgdata.presentation.weatherforecast.getWindString
-import com.liuyuheng.sgdata.presentation.weatherforecast.temperatureUnitToSymbol
+import com.liuyuheng.sgdata.presentation.weatherforecast.shared.getRelativeHumidityString
+import com.liuyuheng.sgdata.presentation.weatherforecast.shared.getWindString
+import com.liuyuheng.sgdata.presentation.weatherforecast.shared.temperatureUnitToSymbol
 
 fun TwentyFourHourForecast.toUi(): TwentyFourHourForecastUi {
     return TwentyFourHourForecastUi(

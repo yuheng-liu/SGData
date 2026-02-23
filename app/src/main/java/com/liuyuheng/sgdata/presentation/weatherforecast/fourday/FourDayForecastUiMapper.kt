@@ -1,10 +1,10 @@
 package com.liuyuheng.sgdata.presentation.weatherforecast.fourday
 
 import com.liuyuheng.sgdata.domain.model.weather.FourDayForecast
-import com.liuyuheng.sgdata.presentation.weatherforecast.getDetailsString
-import com.liuyuheng.sgdata.presentation.weatherforecast.getRelativeHumidityString
-import com.liuyuheng.sgdata.presentation.weatherforecast.getTemperatureString
-import com.liuyuheng.sgdata.presentation.weatherforecast.getWindString
+import com.liuyuheng.sgdata.presentation.weatherforecast.shared.getDetailsString
+import com.liuyuheng.sgdata.presentation.weatherforecast.shared.getRelativeHumidityString
+import com.liuyuheng.sgdata.presentation.weatherforecast.shared.getTemperatureString
+import com.liuyuheng.sgdata.presentation.weatherforecast.shared.getWindString
 
 fun FourDayForecast.toUi(): FourDayForecastUi {
     return FourDayForecastUi(

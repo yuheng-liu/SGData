@@ -1,4 +1,4 @@
-package com.liuyuheng.sgdata.presentation.weatherforecast
+package com.liuyuheng.sgdata.presentation.weatherforecast.shared
 
 import com.liuyuheng.sgdata.domain.model.weather.FourDayForecast
 import com.liuyuheng.sgdata.domain.model.weather.shared.RelativeHumidity

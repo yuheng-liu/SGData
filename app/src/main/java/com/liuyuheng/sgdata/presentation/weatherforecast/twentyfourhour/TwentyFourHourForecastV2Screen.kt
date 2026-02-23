@@ -39,6 +39,7 @@ import com.liuyuheng.sgdata.presentation.shared.dialog.DialogTypes
 import com.liuyuheng.sgdata.presentation.shared.dialog.HttpErrorDialog
 import com.liuyuheng.sgdata.presentation.shared.error.ErrorBox
 import com.liuyuheng.sgdata.presentation.weatherforecast.WeatherForecastV2ViewModel
+import com.liuyuheng.sgdata.presentation.weatherforecast.shared.WeatherRegion
 import com.liuyuheng.sgdata.presentation.weatherforecast.shared.WeatherTextCard
 import com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour.TwentyFourHourForecastUi.PeriodRegionForecastUi
 import com.liuyuheng.sgdata.shared.toDisplayDateV2
@@ -48,6 +49,7 @@ import java.time.LocalDateTime
 @Composable
 fun TwentyFourHourForecastV2Screen(
     viewModel: WeatherForecastV2ViewModel,
+    onNavigateToTwoHourForecast: () -> Unit,
     onNavigateToFourDayForecast: () -> Unit
 ) {
     val uiState by viewModel.twentyFourHourForecastUiState.collectAsStateWithLifecycle()
@@ -67,7 +69,9 @@ fun TwentyFourHourForecastV2Screen(
     } else {
         TwentyFourHoursForecastV2Screen(
             uiState = uiState,
-            onNavigateToFourDayForecast = onNavigateToFourDayForecast
+            onNavigateToTwoHourForecast = onNavigateToTwoHourForecast,
+            onNavigateToFourDayForecast = onNavigateToFourDayForecast,
+            onWeatherRegionClicked = viewModel::onWeatherRegionClicked
         )
     }
 }
@@ -75,9 +79,12 @@ fun TwentyFourHourForecastV2Screen(
 @Composable
 private fun TwentyFourHoursForecastV2Screen(
     uiState: TwentyFourHourForecastUiState,
-    onNavigateToFourDayForecast: () -> Unit
+    onNavigateToTwoHourForecast: () -> Unit,
+    onNavigateToFourDayForecast: () -> Unit,
+    onWeatherRegionClicked: (WeatherRegion) -> Unit
 ) {
     val forecast = uiState.twentyFourHourForecast
+
     Column(
         modifier = Modifier
             .padding(
@@ -95,7 +102,13 @@ private fun TwentyFourHoursForecastV2Screen(
         SGDataSpacer()
         GeneralForecastCard(forecast)
         if (uiState.twentyFourHourForecast.periodRegionForecasts.isNotEmpty()) {
-            PeriodRegionForecastSection(uiState.twentyFourHourForecast.periodRegionForecasts)
+            PeriodRegionForecastSection(
+                periodRegionForecastList = uiState.twentyFourHourForecast.periodRegionForecasts,
+                onCardClicked = { weatherRegion ->
+                    onWeatherRegionClicked(weatherRegion)
+                    onNavigateToTwoHourForecast()
+                }
+            )
         }
         Row(
             modifier = Modifier
@@ -184,6 +197,7 @@ private fun GeneralForecastCard(
 @Composable
 private fun ColumnScope.PeriodRegionForecastSection(
     periodRegionForecastList: List<PeriodRegionForecastUi>,
+    onCardClicked: (WeatherRegion) -> Unit
 ) {
     var selectedIndex by remember { mutableIntStateOf(0) }
     val periodRegionForecast = periodRegionForecastList[selectedIndex]
@@ -217,15 +231,35 @@ private fun ColumnScope.PeriodRegionForecastSection(
         Column(
             modifier = Modifier.verticalScroll(rememberScrollState())
         ) {
-            WeatherTextCard("Central", periodRegionForecast.regions.central)
+            WeatherTextCard(
+                text = WeatherRegion.CENTRAL.text,
+                weatherText = periodRegionForecast.regions.central,
+                onClick = { onCardClicked(WeatherRegion.CENTRAL) }
+            )
             SGDataSpacer(Dimensions.paddingLarge)
-            WeatherTextCard("East", periodRegionForecast.regions.east)
+            WeatherTextCard(
+                text = WeatherRegion.EAST.text,
+                weatherText = periodRegionForecast.regions.east,
+                onClick = { onCardClicked(WeatherRegion.EAST) }
+            )
             SGDataSpacer(Dimensions.paddingLarge)
-            WeatherTextCard("North", periodRegionForecast.regions.north)
+            WeatherTextCard(
+                text = WeatherRegion.NORTH.text,
+                weatherText = periodRegionForecast.regions.north,
+                onClick = { onCardClicked(WeatherRegion.NORTH) }
+            )
             SGDataSpacer(Dimensions.paddingLarge)
-            WeatherTextCard("South", periodRegionForecast.regions.south)
+            WeatherTextCard(
+                text = WeatherRegion.SOUTH.text,
+                weatherText = periodRegionForecast.regions.south,
+                onClick = { onCardClicked(WeatherRegion.SOUTH) }
+            )
             SGDataSpacer(Dimensions.paddingLarge)
-            WeatherTextCard("West", periodRegionForecast.regions.west)
+            WeatherTextCard(
+                text = WeatherRegion.WEST.text,
+                weatherText = periodRegionForecast.regions.west,
+                onClick = { onCardClicked(WeatherRegion.WEST) }
+            )
         }
     }
 }
@@ -268,7 +302,9 @@ private fun TwentyFourHoursForecastV2ScreenPreview() {
                     )
                 )
             ),
-            onNavigateToFourDayForecast = {}
+            onNavigateToTwoHourForecast = {},
+            onNavigateToFourDayForecast = {},
+            onWeatherRegionClicked = {}
         )
     }
 }

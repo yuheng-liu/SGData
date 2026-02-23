@@ -7,6 +7,7 @@ import com.liuyuheng.sgdata.domain.usecase.GetTwentyFourHourForecastUseCase
 import com.liuyuheng.sgdata.presentation.shared.dialog.DialogTypes
 import com.liuyuheng.sgdata.presentation.shared.loader.LoadingStateHandler
 import com.liuyuheng.sgdata.presentation.shared.loader.withLoading
+import com.liuyuheng.sgdata.presentation.weatherforecast.shared.WeatherRegion
 import com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour.TwentyFourHourForecastUiState
 import com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -51,6 +52,10 @@ class WeatherForecastV2ViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun onWeatherRegionClicked(weatherRegion: WeatherRegion) {
+
     }
 
     fun onDismissErrorDialog() {

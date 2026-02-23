@@ -23,10 +23,12 @@ import com.liuyuheng.sgdata.presentation.main.theme.Dimensions
 @Composable
 fun WeatherTextCard(
     text: String,
-    weatherText: WeatherText
+    weatherText: WeatherText,
+    onClick: () -> Unit = {},
 ) {
     Card(
-        modifier = Modifier.height(Dimensions.cardRowHeight)
+        modifier = Modifier.height(Dimensions.cardRowHeight),
+        onClick = onClick,
     ) {
         Row(
             modifier = Modifier

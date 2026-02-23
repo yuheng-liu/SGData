@@ -12,6 +12,7 @@ import androidx.navigation.navigation
 import com.liuyuheng.sgdata.presentation.main.navigation.AppRoute
 import com.liuyuheng.sgdata.presentation.weatherforecast.fourday.FourDayForecastV2Screen
 import com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour.TwentyFourHourForecastV2Screen
+import com.liuyuheng.sgdata.presentation.weatherforecast.twohour.TwoHourForecastV2Screen
 
 fun NavGraphBuilder.weatherForecastV2Graph(navController: NavHostController) {
     navigation(
@@ -21,9 +22,17 @@ fun NavGraphBuilder.weatherForecastV2Graph(navController: NavHostController) {
         composable(WeatherForecastRoute.V2TwentyFourHourForecast.route) {
             TwentyFourHourForecastV2Screen(
                 viewModel = weatherForecastViewModel(navController),
+                onNavigateToTwoHourForecast = {
+                    navController.navigate(WeatherForecastRoute.V2TwoHourForecast.route)
+                },
                 onNavigateToFourDayForecast = {
                     navController.navigate(WeatherForecastRoute.V2FourDayForecast.route)
                 }
+            )
+        }
+        composable(WeatherForecastRoute.V2TwoHourForecast.route) {
+            TwoHourForecastV2Screen(
+                weatherForecastViewModel(navController)
             )
         }
         composable(WeatherForecastRoute.V2FourDayForecast.route) {
