@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.liuyuheng.sgdata.domain.model.weather.TwoHourForecast
 import com.liuyuheng.sgdata.domain.model.weather.shared.TimePeriod
+import com.liuyuheng.sgdata.domain.model.weather.shared.WeatherText
 import com.liuyuheng.sgdata.presentation.main.BasePreviewComposable
 import com.liuyuheng.sgdata.presentation.main.theme.Dimensions
 import com.liuyuheng.sgdata.presentation.shared.SGDataSpacer
@@ -108,15 +109,15 @@ private fun TwoHourForecastScreenPreview() {
                     areaForecasts = listOf(
                         TwoHourForecast.AreaForecast(
                             area = "Ang Mo Kio",
-                            forecast = "Windy"
+                            forecast = WeatherText.WINDY
                         ),
                         TwoHourForecast.AreaForecast(
                             area = "Bishan",
-                            forecast = "Sunny"
+                            forecast = WeatherText.FAIR
                         ),
                         TwoHourForecast.AreaForecast(
                             area = "City",
-                            forecast = "Cloudy"
+                            forecast = WeatherText.CLOUDY
                         )
                     )
                 )

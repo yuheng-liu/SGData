@@ -4,12 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.liuyuheng.sgdata.domain.ApiResult
 import com.liuyuheng.sgdata.domain.usecase.GetTwentyFourHourForecastUseCase
+import com.liuyuheng.sgdata.domain.usecase.GetTwoHourForecastUseCase
 import com.liuyuheng.sgdata.presentation.shared.dialog.DialogTypes
 import com.liuyuheng.sgdata.presentation.shared.loader.LoadingStateHandler
 import com.liuyuheng.sgdata.presentation.shared.loader.withLoading
-import com.liuyuheng.sgdata.presentation.weatherforecast.shared.WeatherRegion
-import com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour.TwentyFourHourForecastUiState
+import com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour.TwentyFourHourForecastV2UiState
 import com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour.toUi
+import com.liuyuheng.sgdata.presentation.weatherforecast.twohour.TwoHourForecastUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,11 +23,16 @@ import javax.inject.Inject
 class WeatherForecastV2ViewModel @Inject constructor(
     private val loadingStateHandler: LoadingStateHandler,
     private val getTwentyFourHourForecastUseCase: GetTwentyFourHourForecastUseCase,
+    private val getTwoHourForecastUseCase: GetTwoHourForecastUseCase,
 ) : ViewModel() {
 
     // 24 Hours
-    private val _twentyFourHourForecastUiState = MutableStateFlow(TwentyFourHourForecastUiState())
+    private val _twentyFourHourForecastUiState = MutableStateFlow<TwentyFourHourForecastV2UiState>(TwentyFourHourForecastV2UiState.Idle)
     val twentyFourHourForecastUiState = _twentyFourHourForecastUiState.asStateFlow()
+
+    // 2 Hours
+    private val _twoHoursForecastUiState = MutableStateFlow(TwoHourForecastUiState())
+    val twoHoursForecastUiState = _twoHoursForecastUiState.asStateFlow()
 
     // error dialog
     private val _dialogState = MutableStateFlow<DialogTypes?>(null)
@@ -37,25 +43,39 @@ class WeatherForecastV2ViewModel @Inject constructor(
     }
 
     fun fetchTwentyFourHoursForecast() = viewModelScope.launch {
+        _twentyFourHourForecastUiState.value = TwentyFourHourForecastV2UiState.Loading
         loadingStateHandler.withLoading {
             when (val twentyFourHourForecast = getTwentyFourHourForecastUseCase(LocalDate.now())) {
                 is ApiResult.Success -> {
-                    _twentyFourHourForecastUiState.update {
-                        it.copy(
-                            twentyFourHourForecast = twentyFourHourForecast.data.toUi()
-                        )
-                    }
+                    _twentyFourHourForecastUiState.value = TwentyFourHourForecastV2UiState.Loaded(
+                        twentyFourHourForecast = twentyFourHourForecast.data.toUi()
+                    )
                 }
 
                 is ApiResult.Error -> {
+                    _twentyFourHourForecastUiState.value = TwentyFourHourForecastV2UiState.Error("No data available")
                     _dialogState.value = DialogTypes.HttpError(twentyFourHourForecast.message ?: "")
                 }
             }
         }
     }
 
-    fun onWeatherRegionClicked(weatherRegion: WeatherRegion) {
+    fun fetchTwoHoursForecast() = viewModelScope.launch {
+        loadingStateHandler.withLoading {
+            when (val twoHourForecast = getTwoHourForecastUseCase()) {
+                is ApiResult.Success -> {
+                    _twoHoursForecastUiState.update {
+                        it.copy(
+                            twoHourForecast = twoHourForecast.data
+                        )
+                    }
+                }
 
+                is ApiResult.Error -> {
+                    _dialogState.value = DialogTypes.HttpError(twoHourForecast.message ?: "")
+                }
+            }
+        }
     }
 
     fun onDismissErrorDialog() {

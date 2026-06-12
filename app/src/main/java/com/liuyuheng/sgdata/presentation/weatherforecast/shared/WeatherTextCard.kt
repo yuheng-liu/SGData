@@ -24,11 +24,10 @@ import com.liuyuheng.sgdata.presentation.main.theme.Dimensions
 fun WeatherTextCard(
     text: String,
     weatherText: WeatherText,
-    onClick: () -> Unit = {},
 ) {
     Card(
         modifier = Modifier.height(Dimensions.cardRowHeight),
-        onClick = onClick,
+        onClick = {},
     ) {
         Row(
             modifier = Modifier

@@ -1,7 +1,7 @@
 [versions]
 activity = "1.12.4"
 activityKtxVersion = "1.12.4"
-agp = "9.1.0"
+agp = "9.2.1"
 coreTesting = "2.2.0"
 coroutinesVersion = "1.10.2"
 fragmentKtx = "1.8.9"

@@ -83,7 +83,6 @@ dependencies {
     implementation(libs.squareup.moshi.kotlin)
     ksp(libs.moshi.kotlin.codegen)
     implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.activity.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.hilt.android)

@@ -1,6 +1,7 @@
 package com.liuyuheng.sgdata.data.model
 
 import com.liuyuheng.sgdata.data.model.weather.ValidPeriod
+import com.liuyuheng.sgdata.data.model.weather.WeatherText
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -31,7 +32,7 @@ data class TwoHourForecastDto(
         @JsonClass(generateAdapter = true)
         data class AreaForecast(
             val area: String,
-            val forecast: String,
+            val forecast: WeatherText,
         )
     }
 }
