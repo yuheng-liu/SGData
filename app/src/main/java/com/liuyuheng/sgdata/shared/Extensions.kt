@@ -17,7 +17,7 @@ fun Long.toFormattedDate(
         .format(DateTimeFormatter.ofPattern(pattern))
 }
 
-fun Long.toLocalDateOrNull(
+fun Long.toLocalDate(
     zoneId: ZoneId = ZoneId.systemDefault(),
 ): LocalDate {
     return Instant.ofEpochMilli(this)
@@ -65,6 +65,11 @@ fun LocalDateTime.toDisplayDateV2(): String {
     val parts = format(formatter).split(" ")
     return "${parts[0]} $dayOfMonth${dayOfMonth.ordinalSuffix()} ${parts[1]}"
 }
+
+fun LocalDate.toEpochMillis(zoneId: ZoneId = ZoneId.systemDefault()): Long = atStartOfDay(zoneId)
+    .toInstant()
+    .toEpochMilli()
+
 
 fun Int.ordinalSuffix(): String {
     return if (this in 11..13) {

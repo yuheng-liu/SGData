@@ -8,23 +8,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.liuyuheng.sgdata.presentation.main.BasePreviewComposable
 import com.liuyuheng.sgdata.presentation.main.theme.Dimensions
 import com.liuyuheng.sgdata.presentation.shared.SGDataSpacer
 import com.liuyuheng.sgdata.presentation.shared.datepickertextfield.DatePickerTextField
 import com.liuyuheng.sgdata.presentation.shared.dialog.DialogTypes
 import com.liuyuheng.sgdata.presentation.shared.dialog.HttpErrorDialog
 import com.liuyuheng.sgdata.presentation.weatherforecast.WeatherForecastViewModel
-import com.liuyuheng.sgdata.shared.toLocalDateOrNull
+import com.liuyuheng.sgdata.shared.toLocalDate
 import java.time.LocalDate
-import java.time.LocalTime
 
 @Composable
 fun FourDayForecastScreen(
@@ -72,7 +68,7 @@ private fun FourDayForecastScreen(
             initialSelectedDateMillis = initialSelectedDateMillis,
             upToDate = initialSelectedDateMillis,
         ) { millis ->
-            onDateSelected(millis?.toLocalDateOrNull())
+            onDateSelected(millis?.toLocalDate())
         }
         SGDataSpacer()
         Button(
@@ -83,18 +79,18 @@ private fun FourDayForecastScreen(
             Text(text = "Get Forecast")
         }
         SGDataSpacer()
-        uiState.fourDayForecast.dataTimestamp?.let { timestamp ->
-            Text(
-                text = "Forecast data last updated at ${timestamp.hour}:${timestamp.minute}",
-                style = MaterialTheme.typography.titleLarge
-            )
-        }
-        SGDataSpacer()
-        ForecastList(
-            forecastList = uiState.fourDayForecast.forecastsList,
-            onForecastCardClicked = onForecastCardClicked,
-            onNavigateToTwentyFourHourForecastScreen = onNavigateToTwentyFourHourForecastScreen
-        )
+//        uiState.fourDayForecast.dataTimestamp?.let { timestamp ->
+//            Text(
+//                text = "Forecast data last updated at ${timestamp.hour}:${timestamp.minute}",
+//                style = MaterialTheme.typography.titleLarge
+//            )
+//        }
+//        SGDataSpacer()
+//        ForecastList(
+//            forecastList = uiState.fourDayForecast.forecastsList,
+//            onForecastCardClicked = onForecastCardClicked,
+//            onNavigateToTwentyFourHourForecastScreen = onNavigateToTwentyFourHourForecastScreen
+//        )
     }
 }
 
@@ -139,39 +135,39 @@ private fun ForecastList(
     }
 }
 
-@Preview
-@Composable
-private fun WeatherForecastScreenPreview() {
-    BasePreviewComposable {
-        FourDayForecastScreen(
-            uiState = FourDayForecastUiState(
-                fourDayForecast = FourDayForecastUi(
-                    dataTimestamp = LocalTime.of(12, 13, 14),
-                    forecastsList = listOf(
-                        FourDayForecastUi.DayForecast(
-                            date = "2026-01-01",
-                            dayOfWeek = "Monday",
-                            temperature = "24°C - 33°C",
-                            relativeHumidity = "55% - 85%",
-                            wind = "15/25 NE",
-                            details = "FA: Fair Day, Fair",
-                        ),
-                        FourDayForecastUi.DayForecast(
-                            date = "2026-01-02",
-                            dayOfWeek = "Tuesday",
-                            temperature = "22°C/30°C",
-                            relativeHumidity = "50/80%",
-                            wind = "15/25 NE",
-                            details = "FA: Fair Day, Fair",
-                        )
-                    )
-                )
-            ),
-            initialSelectedDateMillis = null,
-            onDateSelected = {},
-            onButtonClicked = {},
-            onForecastCardClicked = {},
-            onNavigateToTwentyFourHourForecastScreen = {}
-        )
-    }
-}
+//@Preview
+//@Composable
+//private fun WeatherForecastScreenPreview() {
+//    BasePreviewComposable {
+//        FourDayForecastScreen(
+//            uiState = FourDayForecastUiState(
+//                fourDayForecast = FourDayForecastUi(
+//                    dataTimestamp = LocalTime.of(12, 13, 14),
+//                    forecastsList = listOf(
+//                        FourDayForecastUi.DayForecast(
+//                            date = "2026-01-01",
+//                            dayOfWeek = "Monday",
+//                            temperature = "24°C - 33°C",
+//                            relativeHumidity = "55% - 85%",
+//                            wind = "15/25 NE",
+//                            details = "FA: Fair Day, Fair",
+//                        ),
+//                        FourDayForecastUi.DayForecast(
+//                            date = "2026-01-02",
+//                            dayOfWeek = "Tuesday",
+//                            temperature = "22°C/30°C",
+//                            relativeHumidity = "50/80%",
+//                            wind = "15/25 NE",
+//                            details = "FA: Fair Day, Fair",
+//                        )
+//                    )
+//                )
+//            ),
+//            initialSelectedDateMillis = null,
+//            onDateSelected = {},
+//            onButtonClicked = {},
+//            onForecastCardClicked = {},
+//            onNavigateToTwentyFourHourForecastScreen = {}
+//        )
+//    }
+//}

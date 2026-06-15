@@ -30,11 +30,3 @@ fun getDetailsString(details: FourDayForecast.Forecast.ForecastDetails?): String
         "(${details.code}) ${details.text.displayString}, ${details.summary}"
     } ?: ""
 }
-
-fun temperatureUnitToSymbol(unit: String?): String {
-    return when (unit) {
-        "Degrees Celsius" -> "°C"
-        "Degrees Fahrenheit" -> "°F"
-        else -> ""
-    }
-}

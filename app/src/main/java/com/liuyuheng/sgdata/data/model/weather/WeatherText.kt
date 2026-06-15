@@ -13,7 +13,7 @@ enum class WeatherText {
     @Json(name = "Fair (Night)")
     FAIR_NIGHT,
 
-    @Json(name = "Fair and Warm")
+    @Json(name = "Fair & Warm")
     FAIR_AND_WARM,
 
     @Json(name = "Partly Cloudy")

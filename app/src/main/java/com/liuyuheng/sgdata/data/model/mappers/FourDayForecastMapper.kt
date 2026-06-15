@@ -6,7 +6,7 @@ import com.liuyuheng.sgdata.domain.model.weather.shared.RelativeHumidity
 import com.liuyuheng.sgdata.domain.model.weather.shared.Temperature
 import com.liuyuheng.sgdata.domain.model.weather.shared.WeatherText
 import com.liuyuheng.sgdata.domain.model.weather.shared.Wind
-import com.liuyuheng.sgdata.shared.toLocalDateOrNull
+import com.liuyuheng.sgdata.domain.shared.temperatureUnitToSymbol
 import com.liuyuheng.sgdata.shared.toLocalDateTimeOrNull
 import java.time.DayOfWeek
 import java.time.Instant
@@ -15,18 +15,18 @@ import java.time.ZoneId
 fun FourDayForecastDto.toDomain(): FourDayForecast {
     val latestRecord = records.maxBy { it.updatedTimestamp }
     return FourDayForecast(
-        startDate = latestRecord.date.toLocalDateOrNull(),
+        startDate = latestRecord.date.toLocalDateTimeOrNull(),
         updatedTimestamp = latestRecord.updatedTimestamp.toLocalDateTimeOrNull(),
         forecastsList = latestRecord.forecasts.map { dtoForecast ->
             FourDayForecast.Forecast(
                 date = Instant.parse(dtoForecast.timestamp)
                     .atZone(ZoneId.systemDefault())
-                    .toLocalDate(),
+                    .toLocalDateTime(),
                 dayOfWeek = DayOfWeek.valueOf(dtoForecast.day.name),
                 temperature = Temperature(
                     low = dtoForecast.temperature.low,
                     high = dtoForecast.temperature.high,
-                    unit = dtoForecast.temperature.unit,
+                    unit = temperatureUnitToSymbol(dtoForecast.temperature.unit),
                 ),
                 relativeHumidity = RelativeHumidity(
                     low = dtoForecast.relativeHumidity.low,

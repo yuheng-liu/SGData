@@ -5,17 +5,16 @@ import com.liuyuheng.sgdata.domain.model.weather.shared.Temperature
 import com.liuyuheng.sgdata.domain.model.weather.shared.WeatherText
 import com.liuyuheng.sgdata.domain.model.weather.shared.Wind
 import java.time.DayOfWeek
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 
 data class FourDayForecast(
-    val startDate: LocalDate? = null,
+    val startDate: LocalDateTime? = null,
     val updatedTimestamp: LocalDateTime? = null,
     val forecastsList: List<Forecast> = emptyList(),  // map of date to list of forecasts for that date
 ) {
     data class Forecast(
-        val date: LocalDate,    // date of forecast
+        val date: LocalDateTime,    // date of forecast
         val dayOfWeek: DayOfWeek,
         val temperature: Temperature,
         val relativeHumidity: RelativeHumidity,

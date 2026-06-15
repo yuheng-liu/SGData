@@ -6,7 +6,7 @@ enum class WeatherText(val displayString: String) {
     FAIR("Fair"),
     FAIR_DAY("Fair Day"),
     FAIR_NIGHT("Fair Night"),
-    FAIR_AND_WARM("Fair And Warm"),
+    FAIR_AND_WARM("Fair & Warm"),
     PARTLY_CLOUDY("Partly Cloudy"),
     PARTLY_CLOUDY_DAY("Partly Cloudy Day"),
     PARTLY_CLOUDY_NIGHT("Partly Cloudy Night"),

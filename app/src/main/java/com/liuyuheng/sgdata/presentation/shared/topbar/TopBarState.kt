@@ -62,6 +62,11 @@ fun getTopBarState(
         onBackClicked = { navController.popBackStack() },
     )
 
+    WeatherForecastRoute.V2FourDayForecast.route -> TopBarState.Shown(
+        title = "4 Days Forecast",
+        onBackClicked = { navController.popBackStack() },
+    )
+
     CarparkAvailabilityRoute.CarparkAvailability.route -> TopBarState.Shown(
         title = "Carpark Availability",
         onBackClicked = { navController.popBackStack() }

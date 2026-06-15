@@ -38,6 +38,7 @@ import com.liuyuheng.sgdata.presentation.shared.dialog.DialogTypes
 import com.liuyuheng.sgdata.presentation.shared.dialog.HttpErrorDialog
 import com.liuyuheng.sgdata.presentation.shared.error.ErrorBox
 import com.liuyuheng.sgdata.presentation.weatherforecast.WeatherForecastV2ViewModel
+import com.liuyuheng.sgdata.presentation.weatherforecast.shared.Constants
 import com.liuyuheng.sgdata.presentation.weatherforecast.shared.WeatherRegion
 import com.liuyuheng.sgdata.presentation.weatherforecast.shared.WeatherTextCard
 import com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour.TwentyFourHourForecastUi.PeriodRegionForecastUi
@@ -50,7 +51,7 @@ fun TwentyFourHourForecastV2Screen(
     onNavigateToTwoHourForecast: () -> Unit,
     onNavigateToFourDayForecast: () -> Unit
 ) {
-    val uiState by viewModel.twentyFourHourForecastUiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.twentyFourHoursForecastUiState.collectAsStateWithLifecycle()
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
 
     when (val currentDialog = dialogState) {
@@ -74,7 +75,10 @@ fun TwentyFourHourForecastV2Screen(
                     viewModel.fetchTwoHoursForecast()
                     onNavigateToTwoHourForecast()
                 },
-                onNavigateToFourDayForecast = onNavigateToFourDayForecast,
+                onNavigateToFourDayForecast = {
+                    viewModel.fetchFourDaysForecast()
+                    onNavigateToFourDayForecast()
+                },
             )
         }
 
@@ -280,7 +284,7 @@ private fun TwentyFourHoursForecastV2ScreenPreview() {
             uiState = TwentyFourHourForecastV2UiState.Loaded(
                 twentyFourHourForecast = TwentyFourHourForecastUi(
                     dateTime = LocalDateTime.now(),
-                    temperature = Temperature(24, 33, "°C"),
+                    temperature = Temperature(24, 33, Constants.UNIT_DEGREE_CELSIUS),
                     relativeHumidity = "60% - 95%",
                     wind = "NNE 10-15 km/h",
                     details = "Partly cloudy",

@@ -11,7 +11,6 @@ import com.liuyuheng.sgdata.presentation.shared.loader.LoadingStateHandler
 import com.liuyuheng.sgdata.presentation.shared.loader.withLoading
 import com.liuyuheng.sgdata.presentation.weatherforecast.fourday.FourDayForecastUi
 import com.liuyuheng.sgdata.presentation.weatherforecast.fourday.FourDayForecastUiState
-import com.liuyuheng.sgdata.presentation.weatherforecast.fourday.toUi
 import com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour.TwentyFourHourForecastUiState
 import com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour.toUi
 import com.liuyuheng.sgdata.presentation.weatherforecast.twohour.TwoHourForecastUiState
@@ -75,10 +74,12 @@ class WeatherForecastViewModel @Inject constructor(
     }
 
     fun setSelectedDate(date: LocalDate?) {
-        _fourDayForecastUiState.update {
-            it.copy(
-                selectedDate = date
-            )
+        date?.let {
+            _fourDayForecastUiState.update {
+                it.copy(
+                    selectedDate = date
+                )
+            }
         }
     }
 
@@ -86,11 +87,11 @@ class WeatherForecastViewModel @Inject constructor(
         loadingStateHandler.withLoading {
             when (val fourDayForecast = getFourDayForecastUseCase(_fourDayForecastUiState.value.selectedDate)) {
                 is ApiResult.Success -> {
-                    _fourDayForecastUiState.update {
-                        it.copy(
-                            fourDayForecast = fourDayForecast.data.toUi()
-                        )
-                    }
+//                    _fourDayForecastUiState.update {
+//                        it.copy(
+//                            fourDayForecast = fourDayForecast.data.toUi()
+//                        )
+//                    }
                 }
 
                 is ApiResult.Error -> {

@@ -1,5 +1,7 @@
 package com.liuyuheng.sgdata.presentation.shared.datepickertextfield
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -7,7 +9,6 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
@@ -43,22 +44,29 @@ fun DatePickerTextField(
         } ?: DatePickerDefaults.AllDates
     )
 
-    OutlinedTextField(
-        modifier = Modifier
-            .fillMaxWidth(),
-        value = datePickerState.selectedDateMillis?.toFormattedDate() ?: "",
-        onValueChange = {},
-        label = { Text("Date") },
-        readOnly = true,
-        trailingIcon = {
-            IconButton(onClick = { showDialog = true }) {
+    Box {
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = datePickerState.selectedDateMillis?.toFormattedDate() ?: "",
+            onValueChange = {},
+            label = { Text("Date") },
+            readOnly = true,
+            trailingIcon = {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.outline_calendar_month_24),
                     contentDescription = "Select date"
                 )
             }
-        }
-    )
+        )
+
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .clickable(
+                    onClick = { showDialog = true }
+                ),
+        )
+    }
 
     if (showDialog) {
         DatePickerDialog(
