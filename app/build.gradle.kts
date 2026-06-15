@@ -1,8 +1,5 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
@@ -10,12 +7,12 @@ plugins {
 
 android {
     namespace = "com.liuyuheng.sgdata"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.liuyuheng.sgdata"
         minSdk = 33
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
 
@@ -31,26 +28,30 @@ android {
             )
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
     buildFeatures {
         compose = true
     }
-    kotlin {
-        compilerOptions {
-            jvmTarget = JvmTarget.JVM_11
-            freeCompilerArgs = listOf("-XXLanguage:+PropertyParamAnnotationDefaultTargetMode")
-        }
-    }
+
     lint {
-        disable += "UnusedDataClass"
+        disable.add("UnusedDataClass")
+    }
+}
+
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.add(
+            "-XXLanguage:+PropertyParamAnnotationDefaultTargetMode"
+        )
     }
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -73,7 +74,6 @@ dependencies {
     implementation(libs.androidx.ui.text.google.fonts)
     implementation(libs.androidx.ui.tooling.preview)
     debugImplementation(libs.androidx.ui.tooling)
-    implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.retrofit)
@@ -83,7 +83,6 @@ dependencies {
     implementation(libs.squareup.moshi.kotlin)
     ksp(libs.moshi.kotlin.codegen)
     implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.activity.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
