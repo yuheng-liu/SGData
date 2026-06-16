@@ -3,6 +3,7 @@ package com.liuyuheng.sgdata.domain.model.weather.shared
 import com.liuyuheng.sgdata.R
 
 enum class WeatherText(val displayString: String) {
+    UNKNOWN("Unknown"),
     FAIR("Fair"),
     FAIR_DAY("Fair Day"),
     FAIR_NIGHT("Fair Night"),
@@ -29,6 +30,7 @@ enum class WeatherText(val displayString: String) {
 
     companion object {
         fun getImageResource(weatherText: WeatherText): Int = when (weatherText) {
+            UNKNOWN -> R.drawable.ic_error
             FAIR, FAIR_DAY, FAIR_NIGHT, FAIR_AND_WARM -> R.drawable.image_sun_cloud
             PARTLY_CLOUDY, PARTLY_CLOUDY_DAY, PARTLY_CLOUDY_NIGHT -> R.drawable.image_cloud_sun
             HEAVY_RAIN, HEAVY_SHOWERS -> R.drawable.image_heavy_rain

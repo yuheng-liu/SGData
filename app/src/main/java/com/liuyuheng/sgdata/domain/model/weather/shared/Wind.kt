@@ -1,11 +1,11 @@
 package com.liuyuheng.sgdata.domain.model.weather.shared
 
 data class Wind(
-    val speed: WindSpeed,
-    val direction: String,
+    val speed: WindSpeed = WindSpeed(),
+    val direction: String = "",
 ) {
     data class WindSpeed(
-        val low: Int,
-        val high: Int,
+        val low: Int = 0,
+        val high: Int = 0,
     )
 }

@@ -21,7 +21,7 @@ fun getRelativeHumidityString(relativeHumidity: RelativeHumidity?): String {
 
 fun getWindString(wind: Wind?): String {
     return wind?.let { wind ->
-        "${wind.direction} ${wind.speed.low} - ${wind.speed.high}"
+        "${wind.direction}, (${wind.speed.low} - ${wind.speed.high}) km/h"
     } ?: ""
 }
 

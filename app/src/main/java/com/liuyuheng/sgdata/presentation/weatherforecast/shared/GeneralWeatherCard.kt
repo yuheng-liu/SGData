@@ -3,8 +3,10 @@ package com.liuyuheng.sgdata.presentation.weatherforecast.shared
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,6 +26,7 @@ import com.liuyuheng.sgdata.domain.model.weather.shared.WeatherText
 import com.liuyuheng.sgdata.domain.model.weather.shared.Wind
 import com.liuyuheng.sgdata.presentation.main.BasePreviewComposable
 import com.liuyuheng.sgdata.presentation.main.theme.Dimensions
+import com.liuyuheng.sgdata.presentation.shared.SGDataSpacer
 import com.liuyuheng.sgdata.shared.toDisplayDateV2
 import java.time.LocalDateTime
 
@@ -35,66 +38,84 @@ fun GeneralWeatherCard(
     wind: Wind,
     weatherText: WeatherText,
 ) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-    ) {
+    Card {
         Row(
             modifier = Modifier
+                .height(IntrinsicSize.Min)
                 .fillMaxWidth()
-                .height(Dimensions.cardRowHeight)
-                .padding(horizontal = Dimensions.paddingMedium),
+                .padding(all = Dimensions.paddingLarge),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(dateTime?.toDisplayDateV2()?.replaceFirst(" ", "\n") ?: "")
             Column(
-                modifier = Modifier.fillMaxHeight(),
-                verticalArrangement = Arrangement.SpaceEvenly
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1f)
             ) {
-                Row {
-                    Image(
-                        modifier = Modifier.size(Dimensions.iconSizeMedium),
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_highest_temp),
-                        contentDescription = null
-                    )
-                    Text("${temperature.high}${temperature.unit}")
-                }
-                Row {
-                    Image(
-                        modifier = Modifier.size(Dimensions.iconSizeMedium),
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_lowest_temp),
-                        contentDescription = null
-                    )
-                    Text("${temperature.low}${temperature.unit}")
-                }
-            }
-            Column {
-                Row {
-                    Image(
-                        modifier = Modifier.size(Dimensions.iconSizeMedium),
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_water_droplet),
-                        contentDescription = null
-                    )
-                    Text(getRelativeHumidityString(relativeHumidity))
-                }
+                Text(dateTime?.toDisplayDateV2() ?: "")
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    Image(
-                        modifier = Modifier.size(Dimensions.iconSizeMedium),
-                        imageVector = ImageVector.vectorResource(R.drawable.image_wind),
-                        contentDescription = null
-                    )
-                    Text(getWindString(wind))
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(Dimensions.paddingMedium)
+                    ) {
+                        Row {
+                            Image(
+                                modifier = Modifier.size(Dimensions.iconSizeMedium),
+                                imageVector = ImageVector.vectorResource(R.drawable.ic_highest_temp),
+                                contentDescription = null
+                            )
+                            Text("${temperature.high}${temperature.unit}")
+                        }
+                        Row {
+                            Image(
+                                modifier = Modifier.size(Dimensions.iconSizeMedium),
+                                imageVector = ImageVector.vectorResource(R.drawable.ic_lowest_temp),
+                                contentDescription = null
+                            )
+                            Text("${temperature.low}${temperature.unit}")
+                        }
+                    }
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(Dimensions.paddingMedium)
+                    ) {
+                        Row {
+                            Image(
+                                modifier = Modifier.size(Dimensions.iconSizeMedium),
+                                imageVector = ImageVector.vectorResource(R.drawable.ic_water_droplet),
+                                contentDescription = null
+                            )
+                            Text(getRelativeHumidityString(relativeHumidity))
+                        }
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Image(
+                                modifier = Modifier.size(Dimensions.iconSizeMedium),
+                                imageVector = ImageVector.vectorResource(R.drawable.image_wind),
+                                contentDescription = null
+                            )
+                            Text(getWindString(wind))
+                        }
+                    }
                 }
             }
-            Image(
-                modifier = Modifier.size(Dimensions.imageSizeSmall),
-                imageVector = ImageVector.vectorResource(
-                    WeatherText.getImageResource(weatherText)
-                ),
-                contentDescription = null
-            )
+            SGDataSpacer(Dimensions.paddingLarge)
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    modifier = Modifier.size(Dimensions.imageSizeSmall),
+                    imageVector = ImageVector.vectorResource(
+                        WeatherText.getImageResource(weatherText)
+                    ),
+                    contentDescription = null
+                )
+                Text(weatherText.displayString)
+            }
         }
     }
 }

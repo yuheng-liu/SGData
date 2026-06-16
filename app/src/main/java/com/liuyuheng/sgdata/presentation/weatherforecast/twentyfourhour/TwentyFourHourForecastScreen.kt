@@ -1,19 +1,14 @@
 package com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -29,8 +24,12 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.liuyuheng.sgdata.R
+import com.liuyuheng.sgdata.domain.model.weather.shared.ForecastDetails
+import com.liuyuheng.sgdata.domain.model.weather.shared.RelativeHumidity
 import com.liuyuheng.sgdata.domain.model.weather.shared.Temperature
+import com.liuyuheng.sgdata.domain.model.weather.shared.TimePeriod
 import com.liuyuheng.sgdata.domain.model.weather.shared.WeatherText
+import com.liuyuheng.sgdata.domain.model.weather.shared.Wind
 import com.liuyuheng.sgdata.presentation.main.BasePreviewComposable
 import com.liuyuheng.sgdata.presentation.main.theme.Dimensions
 import com.liuyuheng.sgdata.presentation.shared.SGDataSpacer
@@ -39,10 +38,10 @@ import com.liuyuheng.sgdata.presentation.shared.dialog.HttpErrorDialog
 import com.liuyuheng.sgdata.presentation.shared.error.ErrorBox
 import com.liuyuheng.sgdata.presentation.weatherforecast.WeatherForecastViewModel
 import com.liuyuheng.sgdata.presentation.weatherforecast.shared.Constants
+import com.liuyuheng.sgdata.presentation.weatherforecast.shared.GeneralWeatherCard
 import com.liuyuheng.sgdata.presentation.weatherforecast.shared.WeatherRegion
 import com.liuyuheng.sgdata.presentation.weatherforecast.shared.WeatherTextCard
 import com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour.TwentyFourHourForecastUi.PeriodRegionForecastUi
-import com.liuyuheng.sgdata.shared.toDisplayDateV2
 import java.time.LocalDateTime
 
 @Composable
@@ -107,7 +106,13 @@ private fun TwentyFourHoursForecastScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SGDataSpacer()
-        GeneralForecastCard(forecast)
+        GeneralWeatherCard(
+            dateTime = forecast.dateTime,
+            temperature = forecast.temperature,
+            relativeHumidity = forecast.relativeHumidity,
+            wind = forecast.wind,
+            weatherText = forecast.details.text
+        )
         if (uiState.twentyFourHourForecast.periodRegionForecasts.isNotEmpty()) {
             PeriodRegionForecastSection(
                 periodRegionForecastList = uiState.twentyFourHourForecast.periodRegionForecasts,
@@ -141,72 +146,6 @@ private fun TwentyFourHoursForecastScreen(
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_circle_right),
                 null
-            )
-        }
-    }
-}
-
-@Composable
-private fun GeneralForecastCard(
-    uiState: TwentyFourHourForecastUi,
-) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(Dimensions.cardRowHeight)
-                .padding(horizontal = Dimensions.paddingMedium),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(uiState.dateTime?.toDisplayDateV2()?.replaceFirst(" ", "\n") ?: "")
-            Column(
-                modifier = Modifier.fillMaxHeight(),
-                verticalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Row {
-                    Image(
-                        modifier = Modifier.size(Dimensions.iconSizeMedium),
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_highest_temp),
-                        contentDescription = null
-                    )
-                    Text("${uiState.temperature.high}${uiState.temperature.unit}")
-                }
-                Row {
-                    Image(
-                        modifier = Modifier.size(Dimensions.iconSizeMedium),
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_lowest_temp),
-                        contentDescription = null
-                    )
-                    Text("${uiState.temperature.low}${uiState.temperature.unit}")
-                }
-            }
-            Column {
-                Row {
-                    Image(
-                        modifier = Modifier.size(Dimensions.iconSizeMedium),
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_water_droplet),
-                        contentDescription = null
-                    )
-                    Text(uiState.relativeHumidity)
-                }
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Image(
-                        modifier = Modifier.size(Dimensions.iconSizeMedium),
-                        imageVector = ImageVector.vectorResource(R.drawable.image_wind),
-                        contentDescription = null
-                    )
-                    Text(uiState.wind.replaceFirst(" ", "\n"))
-                }
-            }
-            Image(
-                modifier = Modifier.size(Dimensions.imageSizeSmall),
-                imageVector = ImageVector.vectorResource(R.drawable.image_heavy_rain),
-                contentDescription = null
             )
         }
     }
@@ -285,10 +224,19 @@ private fun TwentyFourHoursForecastScreenPreview() {
                 twentyFourHourForecast = TwentyFourHourForecastUi(
                     dateTime = LocalDateTime.now(),
                     temperature = Temperature(24, 33, Constants.UNIT_DEGREE_CELSIUS),
-                    relativeHumidity = "60% - 95%",
-                    wind = "NNE 10-15 km/h",
-                    details = "Partly cloudy",
-                    validPeriod = "Valid for 24 hours from 12:00 PM today",
+                    relativeHumidity = RelativeHumidity(60, 95, "%"),
+                    wind = Wind(
+                        Wind.WindSpeed(10, 20),
+                        direction = "SW",
+                    ),
+                    details = ForecastDetails(
+                        text = WeatherText.PARTLY_CLOUDY
+                    ),
+                    validPeriod = TimePeriod(
+                        start = "2026-06-17T06:00:00+08:00",
+                        end = "2026-06-17T12:00:00+08:00",
+                        text = "6 am to Midday 17 Jun"
+                    ),
                     periodRegionForecasts = listOf(
                         PeriodRegionForecastUi(
                             timePeriod = "12:00 PM - 06:00 PM",
