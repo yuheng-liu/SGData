@@ -11,30 +11,34 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.liuyuheng.sgdata.presentation.main.navigation.AppRoute
 import com.liuyuheng.sgdata.presentation.weatherforecast.fourday.FourDayForecastScreen
-import com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour.TwentyFourHoursForecastScreen
+import com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour.TwentyFourHourForecastScreen
 import com.liuyuheng.sgdata.presentation.weatherforecast.twohour.TwoHourForecastScreen
 
 fun NavGraphBuilder.weatherForecastGraph(navController: NavHostController) {
     navigation(
-        startDestination = WeatherForecastRoute.FourDayForecast.route,
+        startDestination = WeatherForecastRoute.TwentyFourHourForecast.route,
         route = AppRoute.WeatherForecastGraph.route,
     ) {
-        // Four Day Forecast screen, initial screen
-        composable(WeatherForecastRoute.FourDayForecast.route) {
-            FourDayForecastScreen(
-                weatherForecastViewModel(navController),
-                onNavigateToTwentyFourHourForecastScreen = {
-                    navController.navigate(WeatherForecastRoute.TwentyFourHourForecast.route)
+        composable(WeatherForecastRoute.TwentyFourHourForecast.route) {
+            TwentyFourHourForecastScreen(
+                viewModel = weatherForecastViewModel(navController),
+                onNavigateToTwoHourForecast = {
+                    navController.navigate(WeatherForecastRoute.TwoHourForecast.route)
+                },
+                onNavigateToFourDayForecast = {
+                    navController.navigate(WeatherForecastRoute.FourDayForecast.route)
                 }
             )
         }
-        // Twenty Four Hours Forecast screen
-        composable(WeatherForecastRoute.TwentyFourHourForecast.route) {
-            TwentyFourHoursForecastScreen(weatherForecastViewModel(navController))
-        }
-        // Two Hours Forecast screen
         composable(WeatherForecastRoute.TwoHourForecast.route) {
-            TwoHourForecastScreen(weatherForecastViewModel(navController))
+            TwoHourForecastScreen(
+                weatherForecastViewModel(navController)
+            )
+        }
+        composable(WeatherForecastRoute.FourDayForecast.route) {
+            FourDayForecastScreen(
+                weatherForecastViewModel(navController)
+            )
         }
     }
 }

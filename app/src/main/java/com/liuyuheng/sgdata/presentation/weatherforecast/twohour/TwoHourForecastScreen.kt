@@ -6,14 +6,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.liuyuheng.sgdata.domain.model.weather.TwoHourForecast
+import com.liuyuheng.sgdata.domain.model.weather.TwoHourForecast.AreaForecast
 import com.liuyuheng.sgdata.domain.model.weather.shared.TimePeriod
 import com.liuyuheng.sgdata.domain.model.weather.shared.WeatherText
 import com.liuyuheng.sgdata.presentation.main.BasePreviewComposable
@@ -21,8 +23,8 @@ import com.liuyuheng.sgdata.presentation.main.theme.Dimensions
 import com.liuyuheng.sgdata.presentation.shared.SGDataSpacer
 import com.liuyuheng.sgdata.presentation.shared.dialog.DialogTypes
 import com.liuyuheng.sgdata.presentation.shared.dialog.HttpErrorDialog
-import com.liuyuheng.sgdata.presentation.shared.timeslotdropdown.TimeSlotDropdown
 import com.liuyuheng.sgdata.presentation.weatherforecast.WeatherForecastViewModel
+import com.liuyuheng.sgdata.presentation.weatherforecast.shared.WeatherTextCard
 import java.time.LocalDateTime
 import java.time.LocalTime
 
@@ -43,49 +45,43 @@ fun TwoHourForecastScreen(
     }
 
     TwoHourForecastScreen(
-        uiState = uiState,
-        onTimeSlotSelected = viewModel::onTwoHourTimeslotSelected,
-        onGetForecastButtonPressed = viewModel::fetchTwoHourForecast
+        uiState = uiState
     )
 }
 
 @Composable
 private fun TwoHourForecastScreen(
     uiState: TwoHourForecastUiState,
-    onTimeSlotSelected: (LocalTime) -> Unit,
-    onGetForecastButtonPressed: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.padding(Dimensions.paddingMedium)
+        modifier = Modifier
+            .padding(all = Dimensions.paddingMedium),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Select a 2hr timeslot to retrieve the forecast")
         SGDataSpacer()
-        TimeSlotDropdown { localTime ->
-            onTimeSlotSelected(localTime)
-        }
+        Text(uiState.twoHourForecast.timePeriod.text)
         SGDataSpacer()
-        Button(
-            onClick = {
-                if (uiState.selectedTimeslot != null) {
-                    onGetForecastButtonPressed()
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = "Get Forecast")
-        }
-        SGDataSpacer()
-        if (uiState.twoHourForecast.timePeriod.text.isNotEmpty()) {
-            Text("Below are the forecasts for the time slot ${uiState.twoHourForecast.timePeriod.text}")
-        }
-        SGDataSpacer()
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(Dimensions.paddingMedium)
-        ) {
-            items(uiState.twoHourForecast.areaForecasts.size) { index ->
-                val areaForecast = uiState.twoHourForecast.areaForecasts[index]
-                Text(text = "${areaForecast.area}: ${areaForecast.forecast}")
+        TwoHourForecastList(uiState.twoHourForecast.areaForecasts)
+    }
+}
+
+@Composable
+private fun TwoHourForecastList(
+    areaForecastList: List<AreaForecast>
+) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(Dimensions.paddingMedium)
+    ) {
+        items(areaForecastList.size) { index ->
+            val areaForecast = areaForecastList[index]
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                WeatherTextCard(
+                    text = areaForecast.area,
+                    weatherText = areaForecast.forecast
+                )
             }
         }
     }
@@ -93,7 +89,7 @@ private fun TwoHourForecastScreen(
 
 @Preview
 @Composable
-private fun TwoHourForecastScreenPreview() {
+private fun TwoHourForecastScreen_Preview() {
     BasePreviewComposable {
         TwoHourForecastScreen(
             uiState = TwoHourForecastUiState(
@@ -107,23 +103,21 @@ private fun TwoHourForecastScreenPreview() {
                         text = "4.00 pm to 6.00 pm",
                     ),
                     areaForecasts = listOf(
-                        TwoHourForecast.AreaForecast(
+                        AreaForecast(
                             area = "Ang Mo Kio",
                             forecast = WeatherText.WINDY
                         ),
-                        TwoHourForecast.AreaForecast(
+                        AreaForecast(
                             area = "Bishan",
                             forecast = WeatherText.FAIR
                         ),
-                        TwoHourForecast.AreaForecast(
+                        AreaForecast(
                             area = "City",
                             forecast = WeatherText.CLOUDY
                         )
                     )
                 )
-            ),
-            onTimeSlotSelected = {},
-            onGetForecastButtonPressed = {}
+            )
         )
     }
 }

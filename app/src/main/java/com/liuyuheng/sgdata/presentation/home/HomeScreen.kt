@@ -31,7 +31,6 @@ import com.liuyuheng.sgdata.presentation.shared.SGDataSpacer
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     onNavigateToWeatherForecast: () -> Unit,
-    onNavigateToWeatherForecastV2: () -> Unit,
     onNavigateToCarparkAvailability: () -> Unit,
 ) {
     val screensList by viewModel.screensList.collectAsStateWithLifecycle()
@@ -39,7 +38,6 @@ fun HomeScreen(
     HomeScreen(
         screensList = screensList,
         onNavigateToWeatherForecast = onNavigateToWeatherForecast,
-        onNavigateToWeatherForecastV2 = onNavigateToWeatherForecastV2,
         onNavigateToCarparkAvailability = onNavigateToCarparkAvailability,
     )
 }
@@ -48,7 +46,6 @@ fun HomeScreen(
 fun HomeScreen(
     screensList: List<ScreenType>,
     onNavigateToWeatherForecast: () -> Unit,
-    onNavigateToWeatherForecastV2: () -> Unit,
     onNavigateToCarparkAvailability: () -> Unit,
 ) {
     Column {
@@ -66,7 +63,6 @@ fun HomeScreen(
                     onClick = {
                         when (screenType) {
                             ScreenType.WEATHER_FORECAST -> onNavigateToWeatherForecast()
-                            ScreenType.WEATHER_FORECAST_V2 -> onNavigateToWeatherForecastV2()
                             ScreenType.CARPARK_AVAILABILITY -> onNavigateToCarparkAvailability()
                         }
                     }
@@ -113,7 +109,6 @@ fun HomeScreenPreview() {
         HomeScreen(
             screensList = ScreenType.entries,
             onNavigateToWeatherForecast = {},
-            onNavigateToWeatherForecastV2 = {},
             onNavigateToCarparkAvailability = {}
         )
     }

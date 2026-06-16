@@ -8,7 +8,6 @@ import androidx.navigation.compose.composable
 import com.liuyuheng.sgdata.presentation.carparkavailability.carparkAvailabilityGraph
 import com.liuyuheng.sgdata.presentation.home.HomeScreen
 import com.liuyuheng.sgdata.presentation.weatherforecast.weatherForecastGraph
-import com.liuyuheng.sgdata.presentation.weatherforecast.weatherForecastV2Graph
 
 @Composable
 fun AppNavHost(
@@ -26,9 +25,6 @@ fun AppNavHost(
                 onNavigateToWeatherForecast = {
                     navHostController.navigate(AppRoute.WeatherForecastGraph.route)
                 },
-                onNavigateToWeatherForecastV2 = {
-                    navHostController.navigate(AppRoute.WeatherForecastV2Graph.route)
-                },
                 onNavigateToCarparkAvailability = {
                     navHostController.navigate(AppRoute.CarparkAvailabilityGraph.route)
                 }
@@ -36,8 +32,6 @@ fun AppNavHost(
         }
         // WeatherForecast
         weatherForecastGraph(navHostController)
-        // WeatherForecastV2
-        weatherForecastV2Graph(navHostController)
         // Carpark Availability
         carparkAvailabilityGraph(navHostController)
     }

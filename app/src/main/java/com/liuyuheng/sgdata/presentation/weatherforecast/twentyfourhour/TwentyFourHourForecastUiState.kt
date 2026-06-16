@@ -1,8 +1,13 @@
 package com.liuyuheng.sgdata.presentation.weatherforecast.twentyfourhour
 
-import java.time.LocalDate
+sealed class TwentyFourHourForecastUiState {
+    data object Idle : TwentyFourHourForecastUiState()
+    data object Loading : TwentyFourHourForecastUiState()
+    data class Loaded(
+        val twentyFourHourForecast: TwentyFourHourForecastUi = TwentyFourHourForecastUi(),
+    ) : TwentyFourHourForecastUiState()
 
-data class TwentyFourHourForecastUiState(
-    val selectedDate: LocalDate? = null,
-    val twentyFourHourForecast: TwentyFourHourForecastUi = TwentyFourHourForecastUi(),
-)
+    data class Error(
+        val errorMessage: String,
+    ) : TwentyFourHourForecastUiState()
+}
