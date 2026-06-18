@@ -1,7 +1,7 @@
 package com.liuyuheng.sgdata.core.di
 
-import com.liuyuheng.sgdata.datasetdownload.data.DatasetDownloadApi
-import com.liuyuheng.sgdata.weatherforecast.data.WeatherForecastApi
+import com.liuyuheng.sgdata.core.data.network.api.DatasetDownloadApi
+import com.liuyuheng.sgdata.weatherforecast.data.api.WeatherForecastApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

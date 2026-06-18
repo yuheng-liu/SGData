@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.liuyuheng.sgdata.carparkavailability.domain.models.CarparkInfo
@@ -46,7 +47,7 @@ fun CarparkInfoScreen(
 @Composable
 private fun CarparkInfoScreen(
     uiState: CarparkInfoUiState,
-    onQueryStringChanged: (String) -> Unit,
+    onQueryStringChanged: (TextFieldValue) -> Unit,
     onUpdateCarparkInfoDataset: () -> Unit
 ) {
     Column(
@@ -157,7 +158,7 @@ private fun CarparkInfoScreenPreview() {
                         carparkBasementAvailable = false
                     )
                 ),
-                queryString = "",
+                queryString = TextFieldValue(),
                 lastUpdated = "12th Jan"
             ),
             onQueryStringChanged = {},

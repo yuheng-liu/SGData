@@ -9,10 +9,10 @@ import com.liuyuheng.sgdata.carparkavailability.domain.models.CarparkType
 import com.liuyuheng.sgdata.carparkavailability.domain.models.ParkingSystemType
 import com.liuyuheng.sgdata.carparkavailability.domain.repositories.CarparkInfoRepository
 import com.liuyuheng.sgdata.core.data.database.SGDataDatabase
+import com.liuyuheng.sgdata.core.data.network.api.DatasetDownloadApi
 import com.liuyuheng.sgdata.core.data.repositories.MetadataRepositoryImpl.Companion.CARPARK_INFO_LAST_UPDATED
 import com.liuyuheng.sgdata.core.domain.repositories.MetadataRepository
 import com.liuyuheng.sgdata.core.utils.toBooleanOrNull
-import com.liuyuheng.sgdata.datasetdownload.data.DatasetDownloadApi
 import com.opencsv.CSVReader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

@@ -2,7 +2,7 @@ package com.liuyuheng.sgdata.weatherforecast.data.repository
 
 import com.liuyuheng.sgdata.core.data.network.safeApiCall
 import com.liuyuheng.sgdata.core.domain.models.ApiResult
-import com.liuyuheng.sgdata.weatherforecast.data.WeatherForecastApi
+import com.liuyuheng.sgdata.weatherforecast.data.api.WeatherForecastApi
 import com.liuyuheng.sgdata.weatherforecast.data.mapper.toDomain
 import com.liuyuheng.sgdata.weatherforecast.domain.model.FourDayForecast
 import com.liuyuheng.sgdata.weatherforecast.domain.model.TwentyFourHourForecast

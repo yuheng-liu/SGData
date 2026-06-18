@@ -1,5 +1,6 @@
 package com.liuyuheng.sgdata.carparkavailability.presentation
 
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.liuyuheng.sgdata.carparkavailability.domain.models.CarparkInfo
@@ -24,14 +25,14 @@ class CarparkAvailabilityViewModel @Inject constructor(
     private val getMetadataUseCase: GetMetadataUseCase
 ) : ViewModel() {
 
-    private val queryString = MutableStateFlow("")
+    private val queryString = MutableStateFlow(TextFieldValue())
 
     val uiState = combine(
         queryString,
         getCarparkInfoDatasetUseCase(),
     ) { queryString, carparkInfoList ->
         CarparkInfoUiState(
-            filteredCarparkInfoList = filterCarparkList(queryString, carparkInfoList),
+            filteredCarparkInfoList = filterCarparkList(queryString.text, carparkInfoList),
             queryString = queryString,
             lastUpdated = getMetadataUseCase()?.toDisplayDate() ?: ""
         )
@@ -62,7 +63,7 @@ class CarparkAvailabilityViewModel @Inject constructor(
         updateCarparkInfoDatasetUseCase.updateCarparkInfoDataset()
     }
 
-    fun onQueryStringChanged(query: String) {
+    fun onQueryStringChanged(query: TextFieldValue) {
         queryString.value = query
     }
 }

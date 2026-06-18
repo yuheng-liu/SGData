@@ -11,15 +11,16 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import com.liuyuheng.sgdata.core.presentation.components.BasePreviewComposable
 import com.liuyuheng.sgdata.core.presentation.theme.Dimensions
 
 @Composable
 fun Searchbar(
-    query: String = "",
+    query: TextFieldValue = TextFieldValue(),
     hintText: String = "Search",
-    onQueryChanged: (String) -> Unit = {},
+    onQueryChanged: (TextFieldValue) -> Unit = {},
 ) {
     TextField(
         value = query,
@@ -32,8 +33,8 @@ fun Searchbar(
             Icon(Icons.Default.Search, contentDescription = null)
         },
         trailingIcon = {
-            if (query.isNotEmpty()) {
-                IconButton(onClick = { onQueryChanged("") }) {
+            if (query.text.isNotEmpty()) {
+                IconButton(onClick = { onQueryChanged(TextFieldValue()) }) {
                     Icon(imageVector = Icons.Default.Close, null)
                 }
             }

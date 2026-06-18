@@ -1,8 +1,8 @@
-package com.liuyuheng.sgdata.datasetdownload.data
+package com.liuyuheng.sgdata.core.data.network.api
 
+import com.liuyuheng.sgdata.core.data.network.dto.DatasetDownloadDto
+import com.liuyuheng.sgdata.core.data.network.dto.DatasetPollDownloadDto
 import com.liuyuheng.sgdata.core.data.network.responses.BaseResponse
-import com.liuyuheng.sgdata.datasetdownload.data.model.DatasetDownloadDto
-import com.liuyuheng.sgdata.datasetdownload.data.model.DatasetPollDownloadDto
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.GET

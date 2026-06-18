@@ -1,4 +1,4 @@
-package com.liuyuheng.sgdata.weatherforecast.data
+package com.liuyuheng.sgdata.weatherforecast.data.api
 
 import com.liuyuheng.sgdata.core.data.network.responses.BaseResponse
 import com.liuyuheng.sgdata.weatherforecast.data.model.FourDayForecastDto
