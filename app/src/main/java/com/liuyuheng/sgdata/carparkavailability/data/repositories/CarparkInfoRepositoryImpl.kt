@@ -12,6 +12,8 @@ import com.liuyuheng.sgdata.core.data.database.SGDataDatabase
 import com.liuyuheng.sgdata.core.data.network.api.DatasetDownloadApi
 import com.liuyuheng.sgdata.core.data.repositories.MetadataRepositoryImpl.Companion.CARPARK_INFO_LAST_UPDATED
 import com.liuyuheng.sgdata.core.domain.repositories.MetadataRepository
+import com.liuyuheng.sgdata.core.utils.Constants.CARPARK_INFO_DOWNLOAD_DAYS_THRESHOLD
+import com.liuyuheng.sgdata.core.utils.hasTimePassedSince
 import com.liuyuheng.sgdata.core.utils.toBooleanOrNull
 import com.opencsv.CSVReader
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +22,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.time.Duration
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -57,8 +60,10 @@ class CarparkInfoRepositoryImpl @Inject constructor(
 
     override suspend fun ensureDatabaseUpToDate() {
         withContext(Dispatchers.IO) {
-            if (metadataRepository.getCarparkInfoLastUpdated() == null) {
-                updateCarparkInfoDataset()
+            metadataRepository.getCarparkInfoLastUpdated()?.let { lastUpdated ->
+                if (hasTimePassedSince(lastUpdated, Duration.ofDays(CARPARK_INFO_DOWNLOAD_DAYS_THRESHOLD))) {
+                    updateCarparkInfoDataset()
+                }
             }
         }
     }

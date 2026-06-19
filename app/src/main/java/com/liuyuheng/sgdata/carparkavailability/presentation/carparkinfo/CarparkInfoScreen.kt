@@ -35,7 +35,7 @@ import com.liuyuheng.sgdata.core.utils.toYesNo
 fun CarparkInfoScreen(
     viewModel: CarparkAvailabilityViewModel,
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.carparkInfoUiState.collectAsStateWithLifecycle()
 
     CarparkInfoScreen(
         uiState = uiState,
@@ -55,21 +55,19 @@ private fun CarparkInfoScreen(
             .fillMaxSize()
             .padding(all = Dimensions.paddingMedium)
     ) {
-        if (uiState.lastUpdated.isNotEmpty()) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    modifier = Modifier.weight(1f),
-                    text = "Last retrieved at: ${uiState.lastUpdated}",
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                modifier = Modifier.weight(1f),
+                text = "Last retrieved at: ${uiState.lastUpdated}",
+            )
+            IconButton(onClick = onUpdateCarparkInfoDataset) {
+                Icon(
+                    imageVector = Icons.Filled.Refresh, contentDescription = null
                 )
-                IconButton(onClick = onUpdateCarparkInfoDataset) {
-                    Icon(
-                        imageVector = Icons.Filled.Refresh, contentDescription = null
-                    )
-                }
             }
         }
         Searchbar(

@@ -15,6 +15,7 @@ import javax.inject.Singleton
 
 private const val DATA_GOV_REAL_TIME_DATA_URL = "https://api-open.data.gov.sg/v2/real-time/api/"
 private const val DATA_GOV_DATASETS_URL = "https://api-open.data.gov.sg/v1/public/api/datasets/"
+private const val DATA_API_V1_URL = "https://api.data.gov.sg/v1/"
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -50,12 +51,24 @@ object RetrofitModule {
 
     @Singleton
     @Provides
-    @DatasetEndpoint
+    @DatasetDownloadEndpoint
     fun provideDatasetRetrofit(
         client: OkHttpClient,
         moshi: Moshi,
     ): Retrofit = Retrofit.Builder()
         .baseUrl(DATA_GOV_DATASETS_URL)
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .client(client)
+        .build()
+
+    @Singleton
+    @Provides
+    @DataV1ApiEndpoint
+    fun provideDataV1ApiRetrofit(
+        client: OkHttpClient,
+        moshi: Moshi,
+    ): Retrofit = Retrofit.Builder()
+        .baseUrl(DATA_API_V1_URL)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .client(client)
         .build()

@@ -4,35 +4,49 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.liuyuheng.sgdata.carparkavailability.domain.models.CarparkInfo
+import com.liuyuheng.sgdata.carparkavailability.domain.usecases.GetCarparkAvailabilityUseCase
 import com.liuyuheng.sgdata.carparkavailability.domain.usecases.GetCarparkInfoDatasetUseCase
 import com.liuyuheng.sgdata.carparkavailability.domain.usecases.UpdateCarparkInfoDatasetUseCase
 import com.liuyuheng.sgdata.carparkavailability.presentation.carparkinfo.CarparkInfoUiState
+import com.liuyuheng.sgdata.core.domain.models.ApiResult
 import com.liuyuheng.sgdata.core.domain.usecases.GetMetadataUseCase
 import com.liuyuheng.sgdata.core.utils.toDisplayDate
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel
 class CarparkAvailabilityViewModel @Inject constructor(
-    private val updateCarparkInfoDatasetUseCase: UpdateCarparkInfoDatasetUseCase,
+    private val getMetadataUseCase: GetMetadataUseCase,
     getCarparkInfoDatasetUseCase: GetCarparkInfoDatasetUseCase,
-    private val getMetadataUseCase: GetMetadataUseCase
+    private val updateCarparkInfoDatasetUseCase: UpdateCarparkInfoDatasetUseCase,
+    private val getCarparkAvailabilityUseCase: GetCarparkAvailabilityUseCase,
 ) : ViewModel() {
 
     private val queryString = MutableStateFlow(TextFieldValue())
 
-    val uiState = combine(
+    @OptIn(FlowPreview::class)
+    private val debouncedQuery = queryString
+        .map { it.text }
+        .distinctUntilChanged()
+        .debounce(QUERY_DEBOUNCE_TIME.milliseconds)
+
+    val carparkInfoUiState = combine(
         queryString,
+        debouncedQuery,
         getCarparkInfoDatasetUseCase(),
-    ) { queryString, carparkInfoList ->
+    ) { queryString, debouncedQuery, carparkInfoList ->
         CarparkInfoUiState(
-            filteredCarparkInfoList = filterCarparkList(queryString.text, carparkInfoList),
+            filteredCarparkInfoList = filterCarparkList(debouncedQuery, carparkInfoList),
             queryString = queryString,
             lastUpdated = getMetadataUseCase()?.toDisplayDate() ?: ""
         )
@@ -43,8 +57,21 @@ class CarparkAvailabilityViewModel @Inject constructor(
     )
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             updateCarparkInfoDatasetUseCase.ensureDatabaseUpToDate()
+            fetchCarparkAvailability()
+        }
+    }
+
+    private fun fetchCarparkAvailability() = viewModelScope.launch {
+        when (val carparkAvailability = getCarparkAvailabilityUseCase()) {
+            is ApiResult.Success -> {
+
+            }
+
+            is ApiResult.Error -> {
+
+            }
         }
     }
 
@@ -65,5 +92,9 @@ class CarparkAvailabilityViewModel @Inject constructor(
 
     fun onQueryStringChanged(query: TextFieldValue) {
         queryString.value = query
+    }
+
+    private companion object {
+        const val QUERY_DEBOUNCE_TIME = 500L
     }
 }

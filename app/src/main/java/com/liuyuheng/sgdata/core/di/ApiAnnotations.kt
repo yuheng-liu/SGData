@@ -8,4 +8,8 @@ annotation class RealTimeEndpoint
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class DatasetEndpoint
+annotation class DatasetDownloadEndpoint
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class DataV1ApiEndpoint

@@ -1,5 +1,6 @@
 package com.liuyuheng.sgdata.core.di
 
+import com.liuyuheng.sgdata.carparkavailability.data.api.CarparkAvailabilityApi
 import com.liuyuheng.sgdata.core.data.network.api.DatasetDownloadApi
 import com.liuyuheng.sgdata.weatherforecast.data.api.WeatherForecastApi
 import dagger.Module
@@ -21,7 +22,13 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideDataStoreSearchApi(
-        @DatasetEndpoint retrofit: Retrofit,
+    fun provideDataSetDownloadApi(
+        @DatasetDownloadEndpoint retrofit: Retrofit,
     ): DatasetDownloadApi = retrofit.create(DatasetDownloadApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideCarparkAvailabilityApi(
+        @DataV1ApiEndpoint retrofit: Retrofit,
+    ): CarparkAvailabilityApi = retrofit.create(CarparkAvailabilityApi::class.java)
 }
