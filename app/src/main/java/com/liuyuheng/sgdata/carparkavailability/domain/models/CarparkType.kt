@@ -1,5 +1,8 @@
 package com.liuyuheng.sgdata.carparkavailability.domain.models
 
+/**
+ * Retrieved From https://data.gov.sg/datasets/d_23f946fa557947f93a8043bbef41dd09/view
+ */
 enum class CarparkType(val value: String, val displayText: String) {
     MULTI_STOREY("MULTI-STOREY CAR PARK", "MULTI-STOREY"),
     SURFACE("SURFACE CAR PARK", "SURFACE"),

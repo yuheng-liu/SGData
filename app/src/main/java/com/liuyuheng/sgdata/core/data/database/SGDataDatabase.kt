@@ -8,6 +8,10 @@ import com.liuyuheng.sgdata.carparkavailability.data.models.CarparkInfoEntity
 import com.liuyuheng.sgdata.core.data.database.models.metadata.MetadataDao
 import com.liuyuheng.sgdata.core.data.database.models.metadata.MetadataEntity
 
+/**
+ * Main app Database object
+ */
+
 @Database(
     entities = [CarparkInfoEntity::class, MetadataEntity::class],
     version = 1

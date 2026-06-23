@@ -6,6 +6,11 @@ import com.liuyuheng.sgdata.core.domain.repositories.MetadataRepository
 import java.time.LocalDateTime
 import javax.inject.Inject
 
+/**
+ * Stores metadata related to the app.
+ * In a local room database
+ */
+
 class MetadataRepositoryImpl @Inject constructor(
     private val metadataDao: MetadataDao
 ) : MetadataRepository {

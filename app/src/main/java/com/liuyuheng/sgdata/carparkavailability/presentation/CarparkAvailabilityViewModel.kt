@@ -58,7 +58,6 @@ class CarparkAvailabilityViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            updateCarparkInfoDatasetUseCase.ensureDatabaseUpToDate()
             fetchCarparkAvailability()
         }
     }
@@ -87,7 +86,7 @@ class CarparkAvailabilityViewModel @Inject constructor(
     }
 
     fun updateCarparkInfoDataset() = viewModelScope.launch {
-        updateCarparkInfoDatasetUseCase.updateCarparkInfoDataset()
+        updateCarparkInfoDatasetUseCase.invoke()
     }
 
     fun onQueryStringChanged(query: TextFieldValue) {

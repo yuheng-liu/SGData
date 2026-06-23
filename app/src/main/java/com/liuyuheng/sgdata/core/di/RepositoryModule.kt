@@ -1,9 +1,7 @@
 package com.liuyuheng.sgdata.core.di
 
 import com.liuyuheng.sgdata.carparkavailability.data.repositories.CarparkAvailabilityRepositoryImpl
-import com.liuyuheng.sgdata.carparkavailability.data.repositories.CarparkInfoRepositoryImpl
 import com.liuyuheng.sgdata.carparkavailability.domain.repositories.CarparkAvailabilityRepository
-import com.liuyuheng.sgdata.carparkavailability.domain.repositories.CarparkInfoRepository
 import com.liuyuheng.sgdata.core.data.repositories.MetadataRepositoryImpl
 import com.liuyuheng.sgdata.core.domain.repositories.MetadataRepository
 import com.liuyuheng.sgdata.weatherforecast.data.repository.WeatherForecastRepositoryImpl
@@ -29,12 +27,6 @@ abstract class RepositoryModule {
     abstract fun bindWeatherForecastRepository(
         impl: WeatherForecastRepositoryImpl,
     ): WeatherForecastRepository
-
-    @Singleton
-    @Binds
-    abstract fun bindCarparkInfoRepository(
-        impl: CarparkInfoRepositoryImpl,
-    ): CarparkInfoRepository
 
     @Singleton
     @Binds

@@ -9,6 +9,11 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Url
 
+/**
+ * API for downloading datasets
+ * See "https://guide.data.gov.sg/developer-guide/dataset-apis/download-dataset" for more info
+ */
+
 private const val HDB_CARPARK_INFO_DATASET_ID = "d_23f946fa557947f93a8043bbef41dd09"
 
 private const val PATH_DATASET_ID = "datasetId"

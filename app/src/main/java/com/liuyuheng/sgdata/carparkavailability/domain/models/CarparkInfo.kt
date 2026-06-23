@@ -12,9 +12,16 @@ data class CarparkInfo(
     val carparkDecks: Int,
     val gantryHeight: Double,
     val carparkBasementAvailable: Boolean,
+    val lotsAvailability: List<LotsAvailability>? = null,
 ) {
     data class Coordinates(
         val x: Double,
         val y: Double,
+    )
+
+    data class LotsAvailability(
+        val totalLots: Int,
+        val lotType: CarparkLotType,
+        val availableLots: Int,
     )
 }

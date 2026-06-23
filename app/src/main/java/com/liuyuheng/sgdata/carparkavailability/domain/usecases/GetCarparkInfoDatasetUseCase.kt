@@ -1,10 +1,10 @@
 package com.liuyuheng.sgdata.carparkavailability.domain.usecases
 
-import com.liuyuheng.sgdata.carparkavailability.domain.repositories.CarparkInfoRepository
+import com.liuyuheng.sgdata.carparkavailability.domain.repositories.CarparkAvailabilityRepository
 import javax.inject.Inject
 
 class GetCarparkInfoDatasetUseCase @Inject constructor(
-    private val carparkInfoRepository: CarparkInfoRepository
+    private val carparkAvailabilityRepository: CarparkAvailabilityRepository
 ) {
-    operator fun invoke() = carparkInfoRepository.getCarparkInfoDataset()
+    operator fun invoke() = carparkAvailabilityRepository.getCarparkInfoDataset()
 }
