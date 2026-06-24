@@ -27,7 +27,7 @@ import com.liuyuheng.sgdata.R
 import com.liuyuheng.sgdata.core.presentation.components.BasePreviewComposable
 import com.liuyuheng.sgdata.core.presentation.components.SGDataSpacer
 import com.liuyuheng.sgdata.core.presentation.components.dialog.DialogTypes
-import com.liuyuheng.sgdata.core.presentation.components.dialog.HttpErrorDialog
+import com.liuyuheng.sgdata.core.presentation.components.dialog.SimpleErrorDialog
 import com.liuyuheng.sgdata.core.presentation.components.error.ErrorBox
 import com.liuyuheng.sgdata.core.presentation.theme.Dimensions
 import com.liuyuheng.sgdata.weatherforecast.domain.model.weather.ForecastDetails
@@ -54,7 +54,7 @@ fun TwentyFourHourForecastScreen(
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
 
     when (val currentDialog = dialogState) {
-        is DialogTypes.HttpError -> HttpErrorDialog(
+        is DialogTypes.SimpleError -> SimpleErrorDialog(
             errorMessage = currentDialog.message,
             onDismiss = { viewModel.onDismissErrorDialog() },
         )

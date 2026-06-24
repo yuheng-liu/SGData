@@ -1,15 +1,15 @@
 package com.liuyuheng.sgdata.core
 
 import android.app.Application
+import com.liuyuheng.sgdata.core.di.ApplicationScope
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
-import javax.inject.Inject
 
 @HiltAndroidApp
 class MainApplication : Application() {
 
-    @Inject
+    @ApplicationScope
     lateinit var applicationScope: CoroutineScope
 
     override fun onTerminate() {

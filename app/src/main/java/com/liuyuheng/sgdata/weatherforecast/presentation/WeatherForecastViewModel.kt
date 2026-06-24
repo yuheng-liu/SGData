@@ -2,7 +2,7 @@ package com.liuyuheng.sgdata.weatherforecast.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.liuyuheng.sgdata.core.domain.models.ApiResult
+import com.liuyuheng.sgdata.core.domain.models.DomainResult
 import com.liuyuheng.sgdata.core.presentation.components.dialog.DialogTypes
 import com.liuyuheng.sgdata.core.presentation.components.loader.LoadingStateHandler
 import com.liuyuheng.sgdata.core.presentation.components.loader.withLoading
@@ -53,15 +53,20 @@ class WeatherForecastViewModel @Inject constructor(
         _twentyFourHoursForecastUiState.value = TwentyFourHourForecastUiState.Loading
         loadingStateHandler.withLoading {
             when (val twentyFourHourForecast = getTwentyFourHourForecastUseCase(LocalDate.now())) {
-                is ApiResult.Success -> {
+                is DomainResult.Success -> {
                     _twentyFourHoursForecastUiState.value = TwentyFourHourForecastUiState.Loaded(
                         twentyFourHourForecast = twentyFourHourForecast.data.toUi()
                     )
                 }
 
-                is ApiResult.Error -> {
+                is DomainResult.Failure.NoData -> {
                     _twentyFourHoursForecastUiState.value = TwentyFourHourForecastUiState.Error("No data available")
-                    _dialogState.value = DialogTypes.HttpError(twentyFourHourForecast.message ?: "")
+                    _dialogState.value = DialogTypes.SimpleError(twentyFourHourForecast.message)
+                }
+
+                is DomainResult.Failure.Unavailable -> {
+                    _twentyFourHoursForecastUiState.value = TwentyFourHourForecastUiState.Error("Unavailable")
+                    _dialogState.value = DialogTypes.SimpleError(twentyFourHourForecast.message)
                 }
             }
         }
@@ -70,7 +75,7 @@ class WeatherForecastViewModel @Inject constructor(
     fun fetchTwoHoursForecast() = viewModelScope.launch {
         loadingStateHandler.withLoading {
             when (val twoHourForecast = getTwoHourForecastUseCase()) {
-                is ApiResult.Success -> {
+                is DomainResult.Success -> {
                     _twoHoursForecastUiState.update {
                         it.copy(
                             twoHourForecast = twoHourForecast.data
@@ -78,8 +83,12 @@ class WeatherForecastViewModel @Inject constructor(
                     }
                 }
 
-                is ApiResult.Error -> {
-                    _dialogState.value = DialogTypes.HttpError(twoHourForecast.message ?: "")
+                is DomainResult.Failure.NoData -> {
+                    _dialogState.value = DialogTypes.SimpleError(twoHourForecast.message)
+                }
+
+                is DomainResult.Failure.Unavailable -> {
+                    _dialogState.value = DialogTypes.SimpleError(twoHourForecast.message)
                 }
             }
         }
@@ -88,7 +97,7 @@ class WeatherForecastViewModel @Inject constructor(
     fun fetchFourDaysForecast() = viewModelScope.launch {
         loadingStateHandler.withLoading {
             when (val fourDayForecast = getFourDayForecastUseCase(_fourDaysForecastUiState.value.selectedDate)) {
-                is ApiResult.Success -> {
+                is DomainResult.Success -> {
                     _fourDaysForecastUiState.update {
                         it.copy(
                             fourDayForecast = fourDayForecast.data
@@ -96,8 +105,12 @@ class WeatherForecastViewModel @Inject constructor(
                     }
                 }
 
-                is ApiResult.Error -> {
-                    _dialogState.value = DialogTypes.HttpError(fourDayForecast.message ?: "")
+                is DomainResult.Failure.NoData -> {
+                    _dialogState.value = DialogTypes.SimpleError(fourDayForecast.message)
+                }
+
+                is DomainResult.Failure.Unavailable -> {
+                    _dialogState.value = DialogTypes.SimpleError(fourDayForecast.message)
                 }
             }
         }

@@ -21,7 +21,7 @@ private const val PATH_DATASET_ID = "datasetId"
 interface DatasetDownloadApi {
 
     @GET("{$PATH_DATASET_ID}/initiate-download")
-    suspend fun initiateCarparkInfoDownload(
+    suspend fun initiateCarparkDetailsDownload(
         @Path(PATH_DATASET_ID) datasetId: String = HDB_CARPARK_INFO_DATASET_ID,
     ): BaseResponse<DatasetDownloadDto>
 

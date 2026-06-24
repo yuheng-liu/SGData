@@ -1,7 +1,8 @@
 package com.liuyuheng.sgdata.weatherforecast.data.repository
 
+import com.liuyuheng.sgdata.core.data.models.ApiResult
 import com.liuyuheng.sgdata.core.data.network.safeApiCall
-import com.liuyuheng.sgdata.core.domain.models.ApiResult
+import com.liuyuheng.sgdata.core.domain.models.DomainResult
 import com.liuyuheng.sgdata.weatherforecast.data.api.WeatherForecastApi
 import com.liuyuheng.sgdata.weatherforecast.data.mapper.toDomain
 import com.liuyuheng.sgdata.weatherforecast.domain.model.FourDayForecast
@@ -17,23 +18,52 @@ class WeatherForecastRepositoryImpl @Inject constructor(
     private val weatherForecastApi: WeatherForecastApi,
 ) : WeatherForecastRepository {
 
-    override suspend fun getFourDayForecast(date: LocalDate?): ApiResult<FourDayForecast> =
-        safeApiCall {
+    override suspend fun getFourDayForecast(date: LocalDate?): DomainResult<FourDayForecast> {
+        val apiResult = safeApiCall {
             val fourDayForecastResponse = weatherForecastApi.getFourDayForecast(date?.toString())
             fourDayForecastResponse.data?.toDomain() ?: FourDayForecast()
         }
+        return when (apiResult) {
+            is ApiResult.Success -> {
+                DomainResult.Success(apiResult.data)
+            }
 
-    override suspend fun getTwentyFourHourForecast(date: LocalDate?): ApiResult<TwentyFourHourForecast> =
-        safeApiCall {
+            is ApiResult.Error.HttpError -> DomainResult.Failure.NoData(apiResult.message)
+            is ApiResult.Error.NetworkError -> DomainResult.Failure.NoData(apiResult.message)
+            is ApiResult.Error.UnknownError -> DomainResult.Failure.Unavailable(apiResult.message)
+        }
+    }
+
+    override suspend fun getTwentyFourHourForecast(date: LocalDate?): DomainResult<TwentyFourHourForecast> {
+        val apiResult = safeApiCall {
             val twentyFourHourForecastResponse = weatherForecastApi.getTwentyFourHourForecast(date?.toString())
             twentyFourHourForecastResponse.data?.toDomain() ?: TwentyFourHourForecast()
         }
+        return when (apiResult) {
+            is ApiResult.Success -> {
+                DomainResult.Success(apiResult.data)
+            }
 
-    override suspend fun getTwoHourForecast(dateTime: LocalDateTime?): ApiResult<TwoHourForecast> {
+            is ApiResult.Error.HttpError -> DomainResult.Failure.NoData(apiResult.message)
+            is ApiResult.Error.NetworkError -> DomainResult.Failure.NoData(apiResult.message)
+            is ApiResult.Error.UnknownError -> DomainResult.Failure.Unavailable(apiResult.message)
+        }
+    }
+
+    override suspend fun getTwoHourForecast(dateTime: LocalDateTime?): DomainResult<TwoHourForecast> {
         val formattedDateTime = dateTime?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))
-        return safeApiCall {
+        val apiResult = safeApiCall {
             val twoHourForecastResponse = weatherForecastApi.getTwoHourForecast(formattedDateTime)
             twoHourForecastResponse.data?.toDomain() ?: TwoHourForecast()
+        }
+        return when (apiResult) {
+            is ApiResult.Success -> {
+                DomainResult.Success(apiResult.data)
+            }
+
+            is ApiResult.Error.HttpError -> DomainResult.Failure.NoData(apiResult.message)
+            is ApiResult.Error.NetworkError -> DomainResult.Failure.NoData(apiResult.message)
+            is ApiResult.Error.UnknownError -> DomainResult.Failure.Unavailable(apiResult.message)
         }
     }
 }

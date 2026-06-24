@@ -1,8 +1,8 @@
 package com.liuyuheng.sgdata.core.data.network
 
 import android.util.Log
+import com.liuyuheng.sgdata.core.data.models.ApiResult
 import com.liuyuheng.sgdata.core.data.network.responses.ErrorResponse
-import com.liuyuheng.sgdata.core.domain.models.ApiResult
 import com.liuyuheng.sgdata.core.utils.Constants
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers
@@ -22,11 +22,8 @@ suspend inline fun <T> safeApiCall(
             val moshiAdapter = Moshi.Builder().build().adapter(ErrorResponse::class.java)
             val errorResponse = moshiAdapter.fromJson(errorBody)
 
-            ApiResult.Error(
-                exception = e,
-                message = errorResponse?.errorMsg ?: Constants.UNKNOWN_ERROR,
-            )
-        } ?: ApiResult.Error(
+            ApiResult.Error.HttpError(e, errorResponse?.errorMsg ?: Constants.UNKNOWN_ERROR)
+        } ?: ApiResult.Error.HttpError(
             exception = e,
             message = when (e.code()) {
                 401 -> Constants.UNAUTHORIZED
@@ -38,9 +35,9 @@ suspend inline fun <T> safeApiCall(
         )
     } catch (e: IOException) {
         Log.e("safeApiCall", e.toString())
-        ApiResult.Error(e, Constants.CONNECTION_ISSUE)
+        ApiResult.Error.NetworkError(e, Constants.CONNECTION_ISSUE)
     } catch (e: Exception) {
         Log.e("safeApiCall", e.toString())
-        ApiResult.Error(e, Constants.UNKNOWN_ERROR)
+        ApiResult.Error.UnknownError(e, Constants.UNKNOWN_ERROR)
     }
 }

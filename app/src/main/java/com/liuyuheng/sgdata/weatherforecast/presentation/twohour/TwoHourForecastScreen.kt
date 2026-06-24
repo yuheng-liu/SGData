@@ -17,7 +17,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.liuyuheng.sgdata.core.presentation.components.BasePreviewComposable
 import com.liuyuheng.sgdata.core.presentation.components.SGDataSpacer
 import com.liuyuheng.sgdata.core.presentation.components.dialog.DialogTypes
-import com.liuyuheng.sgdata.core.presentation.components.dialog.HttpErrorDialog
+import com.liuyuheng.sgdata.core.presentation.components.dialog.SimpleErrorDialog
 import com.liuyuheng.sgdata.core.presentation.theme.Dimensions
 import com.liuyuheng.sgdata.weatherforecast.domain.model.TwoHourForecast
 import com.liuyuheng.sgdata.weatherforecast.domain.model.TwoHourForecast.AreaForecast
@@ -36,7 +36,7 @@ fun TwoHourForecastScreen(
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
 
     when (val currentDialog = dialogState) {
-        is DialogTypes.HttpError -> HttpErrorDialog(
+        is DialogTypes.SimpleError -> SimpleErrorDialog(
             errorMessage = currentDialog.message,
             onDismiss = { viewModel.onDismissErrorDialog() },
         )

@@ -6,5 +6,7 @@ import javax.inject.Inject
 class GetCarparkAvailabilityUseCase @Inject constructor(
     private val carparkAvailabilityRepository: CarparkAvailabilityRepository
 ) {
-    suspend operator fun invoke() = carparkAvailabilityRepository.getCarparkAvailability()
+    fun getCarparkAvailabilityStream() = carparkAvailabilityRepository.carparkAvailabilityDataStream
+
+    suspend fun fetchCarparkAvailability() = carparkAvailabilityRepository.fetchCarparkAvailability()
 }

@@ -1,4 +1,4 @@
-package com.liuyuheng.sgdata.carparkavailability.presentation.carparkinfo
+package com.liuyuheng.sgdata.carparkavailability.presentation.carparkdetails
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,11 +20,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.liuyuheng.sgdata.carparkavailability.domain.models.CarparkInfo
 import com.liuyuheng.sgdata.carparkavailability.domain.models.CarparkType
 import com.liuyuheng.sgdata.carparkavailability.domain.models.ParkingSystemType
-import com.liuyuheng.sgdata.carparkavailability.presentation.CarparkAvailabilityViewModel
 import com.liuyuheng.sgdata.core.presentation.components.BasePreviewComposable
 import com.liuyuheng.sgdata.core.presentation.components.SGDataSpacer
 import com.liuyuheng.sgdata.core.presentation.components.searchbar.Searchbar
@@ -32,12 +32,12 @@ import com.liuyuheng.sgdata.core.presentation.theme.Dimensions
 import com.liuyuheng.sgdata.core.utils.toYesNo
 
 @Composable
-fun CarparkInfoScreen(
-    viewModel: CarparkAvailabilityViewModel,
+fun CarparkDetailsScreen(
+    viewModel: CarparkDetailsViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.carparkInfoUiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.carparkDetailsUiState.collectAsStateWithLifecycle()
 
-    CarparkInfoScreen(
+    CarparkDetailsScreen(
         uiState = uiState,
         onQueryStringChanged = viewModel::onQueryStringChanged,
         onUpdateCarparkInfoDataset = viewModel::updateCarparkInfoDataset,
@@ -45,8 +45,8 @@ fun CarparkInfoScreen(
 }
 
 @Composable
-private fun CarparkInfoScreen(
-    uiState: CarparkInfoUiState,
+private fun CarparkDetailsScreen(
+    uiState: CarparkDetailsUiState,
     onQueryStringChanged: (TextFieldValue) -> Unit,
     onUpdateCarparkInfoDataset: () -> Unit
 ) {
@@ -85,14 +85,14 @@ private fun CarparkInfoScreen(
                 count = carparkInfoList.size,
                 key = { carparkInfoList[it].carparkId }
             ) { index ->
-                CarparkInfoItem(carparkInfoList[index])
+                CarparkDetailsItem(carparkInfoList[index])
             }
         }
     }
 }
 
 @Composable
-private fun CarparkInfoItem(
+private fun CarparkDetailsItem(
     carparkInfo: CarparkInfo
 ) {
     Card(
@@ -124,10 +124,10 @@ private fun CarparkInfoItem(
 
 @Preview
 @Composable
-private fun CarparkInfoScreenPreview() {
+private fun CarparkDetailsScreenPreview() {
     BasePreviewComposable {
-        CarparkInfoScreen(
-            uiState = CarparkInfoUiState(
+        CarparkDetailsScreen(
+            uiState = CarparkDetailsUiState(
                 filteredCarparkInfoList = listOf(
                     CarparkInfo(
                         carparkId = "CarparkId1",

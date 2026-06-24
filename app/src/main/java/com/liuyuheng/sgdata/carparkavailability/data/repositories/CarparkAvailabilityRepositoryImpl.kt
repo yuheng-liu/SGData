@@ -3,7 +3,6 @@ package com.liuyuheng.sgdata.carparkavailability.data.repositories
 import androidx.room.withTransaction
 import com.liuyuheng.sgdata.carparkavailability.data.api.CarparkAvailabilityApi
 import com.liuyuheng.sgdata.carparkavailability.data.mappers.toDomain
-import com.liuyuheng.sgdata.carparkavailability.data.models.CarparkAvailabilityDto
 import com.liuyuheng.sgdata.carparkavailability.data.models.CarparkAvailabilityDto.CarparkAvailabilityData.CarparkData
 import com.liuyuheng.sgdata.carparkavailability.data.models.CarparkInfoDao
 import com.liuyuheng.sgdata.carparkavailability.data.models.CarparkInfoEntity
@@ -14,11 +13,12 @@ import com.liuyuheng.sgdata.carparkavailability.domain.models.CarparkType
 import com.liuyuheng.sgdata.carparkavailability.domain.models.ParkingSystemType
 import com.liuyuheng.sgdata.carparkavailability.domain.repositories.CarparkAvailabilityRepository
 import com.liuyuheng.sgdata.core.data.database.SGDataDatabase
+import com.liuyuheng.sgdata.core.data.models.ApiResult
 import com.liuyuheng.sgdata.core.data.network.api.DatasetDownloadApi
 import com.liuyuheng.sgdata.core.data.network.safeApiCall
 import com.liuyuheng.sgdata.core.data.repositories.MetadataRepositoryImpl.Companion.CARPARK_INFO_LAST_UPDATED
 import com.liuyuheng.sgdata.core.di.ApplicationScope
-import com.liuyuheng.sgdata.core.domain.models.ApiResult
+import com.liuyuheng.sgdata.core.domain.models.DomainResult
 import com.liuyuheng.sgdata.core.domain.repositories.MetadataRepository
 import com.liuyuheng.sgdata.core.utils.Constants.CARPARK_INFO_DOWNLOAD_DAYS_THRESHOLD
 import com.liuyuheng.sgdata.core.utils.hasTimePassedSince
@@ -26,8 +26,12 @@ import com.liuyuheng.sgdata.core.utils.toBooleanOrNull
 import com.opencsv.CSVReader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -64,32 +68,42 @@ class CarparkAvailabilityRepositoryImpl @Inject constructor(
             // update carpark info database if it has been more than a week
             metadataRepository.getCarparkInfoLastUpdated()?.let { lastUpdated ->
                 if (hasTimePassedSince(lastUpdated, Duration.ofDays(CARPARK_INFO_DOWNLOAD_DAYS_THRESHOLD))) {
-                    updateCarparkInfoDataset()
+                    updateCarparkDetailsDataset()
                 }
             }
         }
     }
 
-    val carparkAvailabilityInfoStream = combine(
+    private val _carparkAvailabilityApiTrigger = MutableSharedFlow<Unit>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val carparkAvailabilityApiStream = _carparkAvailabilityApiTrigger.flatMapLatest {
+        flow { emit(safeApiCall { carparkAvailabilityApi.getCarparkAvailability() }) }
+    }
+
+    override val carparkAvailabilityDataStream = combine(
         carparkInfoDao.getCarparkInfoStream(),
-        getCarparkAvailabilityStream(),
+        carparkAvailabilityApiStream,
     ) { carparkInfoEntities, carparkAvailabilityResult ->
         when (carparkAvailabilityResult) {
-            is ApiResult.Error -> carparkAvailabilityResult
             is ApiResult.Success -> {
-                ApiResult.Success(
+                DomainResult.Success(
                     mergeCarparkInfoAndAvailability(
                         carparkInfoEntities,
                         carparkAvailabilityResult.data.items.first().carparkData
                     )
                 )
             }
+
+            is ApiResult.Error.HttpError -> DomainResult.Failure.NoData(carparkAvailabilityResult.message)
+            is ApiResult.Error.NetworkError -> DomainResult.Failure.NoData(carparkAvailabilityResult.message)
+            is ApiResult.Error.UnknownError -> DomainResult.Failure.Unavailable(carparkAvailabilityResult.message)
         }
     }
 
-    override fun updateCarparkInfoDataset() {
+    override fun updateCarparkDetailsDataset() {
         appScope.launch(Dispatchers.IO) {
-            val downloadResponse = datasetDownloadApi.initiateCarparkInfoDownload()
+            val downloadResponse = datasetDownloadApi.initiateCarparkDetailsDownload()
             downloadResponse.data?.let { downloadData ->
                 // returned url points to a CSV file containing all carpark info
                 val response = datasetDownloadApi.downloadFromUrl(downloadData.url)
@@ -109,12 +123,12 @@ class CarparkAvailabilityRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getCarparkAvailabilityStream(): Flow<ApiResult<CarparkAvailabilityDto>> = flow {
-        emit(safeApiCall { carparkAvailabilityApi.getCarparkAvailability() })
-    }
-
-    override fun getCarparkInfoDataset(): Flow<List<CarparkInfo>> =
+    override fun getCarparkDetailsDataset(): Flow<List<CarparkInfo>> =
         carparkInfoDao.getCarparkInfoStream().map { entities -> entities.map { it.toDomain() } }
+
+    override suspend fun fetchCarparkAvailability() {
+        _carparkAvailabilityApiTrigger.emit(Unit)
+    }
 
     private fun parseCsv(inputStream: InputStream): List<CarparkInfoEntity> {
         val reader = CSVReader(InputStreamReader(inputStream))

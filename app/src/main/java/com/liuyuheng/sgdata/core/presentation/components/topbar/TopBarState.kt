@@ -45,8 +45,8 @@ fun getTopBarState(
         title = "Carpark Availability",
         onBackClicked = { navController.popBackStack() }
     )
-    CarparkAvailabilityRoute.CarparkInfo.route -> TopBarState.Shown(
-        title = "Carpark Info",
+    CarparkAvailabilityRoute.CarparkDetails.route -> TopBarState.Shown(
+        title = "Carpark Details",
         onBackClicked = { navController.popBackStack() }
     )
 

@@ -17,7 +17,7 @@ import com.liuyuheng.sgdata.core.presentation.components.BasePreviewComposable
 import com.liuyuheng.sgdata.core.presentation.components.SGDataSpacer
 import com.liuyuheng.sgdata.core.presentation.components.datepickertextfield.DatePickerTextField
 import com.liuyuheng.sgdata.core.presentation.components.dialog.DialogTypes
-import com.liuyuheng.sgdata.core.presentation.components.dialog.HttpErrorDialog
+import com.liuyuheng.sgdata.core.presentation.components.dialog.SimpleErrorDialog
 import com.liuyuheng.sgdata.core.presentation.theme.Dimensions
 import com.liuyuheng.sgdata.core.utils.toEpochMillis
 import com.liuyuheng.sgdata.core.utils.toLocalDate
@@ -41,7 +41,7 @@ fun FourDayForecastScreen(
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
 
     when (val currentDialog = dialogState) {
-        is DialogTypes.HttpError -> HttpErrorDialog(
+        is DialogTypes.SimpleError -> SimpleErrorDialog(
             errorMessage = currentDialog.message,
             onDismiss = { viewModel.onDismissErrorDialog() },
         )

@@ -6,16 +6,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-fun HttpErrorDialog(
+fun SimpleErrorDialog(
     errorMessage: String,
-    onDismiss: () -> Unit,
+    onDismiss: (() -> Unit)? = null,
 ) {
     AlertDialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = onDismiss ?: {},
         title = { Text(text = "Error") },
         text = { Text(errorMessage) },
         confirmButton = {
-            Button(onClick = { onDismiss() }) {
+            Button(onClick = { onDismiss?.invoke() }) {
                 Text(text = "OK")
             }
         }
