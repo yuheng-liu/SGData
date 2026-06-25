@@ -1,4 +1,4 @@
-package com.liuyuheng.sgdata.core.data.network.dto
+package com.liuyuheng.sgdata.core.data.models.dto
 
 import com.squareup.moshi.JsonClass
 

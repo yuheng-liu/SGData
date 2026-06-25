@@ -1,7 +1,7 @@
 package com.liuyuheng.sgdata.core.data.repositories
 
-import com.liuyuheng.sgdata.core.data.database.models.metadata.MetadataDao
-import com.liuyuheng.sgdata.core.data.database.models.metadata.MetadataEntity
+import com.liuyuheng.sgdata.core.data.models.dao.MetadataDao
+import com.liuyuheng.sgdata.core.data.models.dao.MetadataEntity
 import com.liuyuheng.sgdata.core.domain.repositories.MetadataRepository
 import java.time.LocalDateTime
 import javax.inject.Inject

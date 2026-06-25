@@ -1,4 +1,4 @@
-package com.liuyuheng.sgdata.core.data.database.models.metadata
+package com.liuyuheng.sgdata.core.data.models.dao
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

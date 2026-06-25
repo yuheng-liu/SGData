@@ -1,4 +1,4 @@
-package com.liuyuheng.sgdata.core
+package com.liuyuheng.sgdata
 
 import android.app.Application
 import com.liuyuheng.sgdata.core.di.ApplicationScope
